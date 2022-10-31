@@ -1,16 +1,13 @@
 package abl.frd.converter.helper;
 
 import abl.frd.converter.model.ApiDataModel;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVRecord;
+import abl.frd.converter.model.BeftnDataModel;
+import org.apache.commons.csv.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class BeftnDataServiceHelper {
@@ -23,13 +20,13 @@ public class BeftnDataServiceHelper {
         }
         return false;
     }
-    public static List<ApiDataModel> csvToBeftnModels(InputStream is) {
+    public static List<BeftnDataModel> csvToBeftnModels(InputStream is) {
         try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
              CSVParser csvParser = new CSVParser(fileReader, CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim());) {
-            List<ApiDataModel> apiDataModelList = new ArrayList<>();
+            List<BeftnDataModel> beftnDataModelList = new ArrayList<>();
             Iterable<CSVRecord> csvRecords = csvParser.getRecords();
             for (CSVRecord csvRecord : csvRecords) {
-                ApiDataModel apiDataModel = new ApiDataModel(
+                BeftnDataModel beftnDataModel = new BeftnDataModel(
                         csvRecord.get("Excode").replace("\"", ""),
                         csvRecord.get("Tranno").replace("\"", ""),
                         csvRecord.get("Currency").replace("\"", ""),
@@ -42,11 +39,53 @@ public class BeftnDataServiceHelper {
                         csvRecord.get("Bank Name").replace("\"", ""),
                         csvRecord.get("Branch Name").replace("\"", ""),
                         csvRecord.get("Branch Code").replace("\"", ""));
-                apiDataModelList.add(apiDataModel);
+                beftnDataModelList.add(beftnDataModel);
             }
-            return apiDataModelList;
+            return beftnDataModelList;
         } catch (IOException e) {
             throw new RuntimeException("fail to parse CSV file: " + e.getMessage());
+        }
+    }
+
+    public static ByteArrayInputStream beftnModelToCSV(List<BeftnDataModel> beftnDataModelList) {
+        final CSVFormat format = CSVFormat.DEFAULT.withQuoteMode(QuoteMode.NON_NUMERIC);
+
+        try (ByteArrayOutputStream out = new ByteArrayOutputStream();
+             CSVPrinter csvPrinter = new CSVPrinter(new PrintWriter(out), format);) {
+            for (BeftnDataModel beftnDataModel : beftnDataModelList) {
+                List<Object> data = Arrays.asList(
+                        beftnDataModel.getTranNo(),
+                        "CRED",
+                        beftnDataModel.getEnteredDate(),
+                        beftnDataModel.getCurrency(),
+                        beftnDataModel.getAmount(),
+                        beftnDataModel.getRemitter(),
+                        beftnDataModel.getExCode(),
+                        beftnDataModel.getBankName(),
+                        beftnDataModel.getBranchName(),
+                        null,
+                        beftnDataModel.getBeneficiaryAccount(),
+                        beftnDataModel.getBeneficiary(),
+                        null,
+                        null,
+                        //apiModel.getBankCode(),
+                        "4006",
+                        //apiModel.getBranchCode(),
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null
+                );
+                csvPrinter.printRecord(data);
+            }
+
+            csvPrinter.flush();
+            return new ByteArrayInputStream(out.toByteArray());
+        } catch (IOException e) {
+            throw new RuntimeException("fail to import data to CSV file: " + e.getMessage());
         }
     }
 }
