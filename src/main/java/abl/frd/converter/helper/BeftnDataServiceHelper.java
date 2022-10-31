@@ -3,6 +3,7 @@ package abl.frd.converter.helper;
 import abl.frd.converter.model.ApiDataModel;
 import abl.frd.converter.model.BeftnDataModel;
 import org.apache.commons.csv.*;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@Component
 public class BeftnDataServiceHelper {
     public static String TYPE = "text/csv";
     static String[] HEADERs = {"Excode","Tranno","Currency","Amount","Entered Date","Remitter","Beneficiary","Bene A/C","Bank Name","Bank Code","Branch Name","Branch Code"};

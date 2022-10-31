@@ -6,6 +6,7 @@ import abl.frd.converter.model.ExchangeCodeMapperModel;
 import abl.frd.converter.repository.BeftnDataModelRepository;
 import abl.frd.converter.repository.ExchangeCodeMapperModelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayInputStream;
@@ -14,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class BeftnDataService {
     @Autowired
     BeftnDataModelRepository repository;
