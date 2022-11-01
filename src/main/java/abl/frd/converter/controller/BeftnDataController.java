@@ -1,9 +1,9 @@
 package abl.frd.converter.controller;
 
 import abl.frd.converter.ResponseMessage;
-import abl.frd.converter.helper.ApiDataServiceHelper;
-import abl.frd.converter.model.ApiDataModel;
-import abl.frd.converter.service.ApiDataService;
+import abl.frd.converter.helper.BeftnDataServiceHelper;
+import abl.frd.converter.model.BeftnDataModel;
+import abl.frd.converter.service.BeftnDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -15,40 +15,43 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import java.util.List;
+
 @Controller
 @CrossOrigin("http://localhost:8080")
-@RequestMapping("/api")
-public class ApiDataController {
-    private final ApiDataService fileService;
+@RequestMapping("/beftn")
+public class BeftnDataController {
+
+    private final BeftnDataService beftnFileService;
+
     @Autowired
-    public ApiDataController(ApiDataService apiDataService){
-        this.fileService = apiDataService;
+    public BeftnDataController(BeftnDataService beftnDataService) {
+        this.beftnFileService = beftnDataService;
     }
+
     @GetMapping(value = "/index")
     public String homePage() {
-        return "api";
+        return "beftn";
     }
 
     @GetMapping(value = "/cleardb")
     public ResponseEntity<ResponseMessage> clearDb() {
         String message = "Database Cleared!";
-        fileService.clearDatabase();
+        beftnFileService.clearDatabase();
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
     }
 
     @PostMapping("/upload")
     public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
         String message = "";
-        if (ApiDataServiceHelper.hasCSVFormat(file)) {
+        if (BeftnDataServiceHelper.hasCSVFormat(file)) {
             int extensionIndex = file.getOriginalFilename().lastIndexOf(".");
             String fileNameWithoutExtension = file.getOriginalFilename().substring(0,extensionIndex);
             try {
-                fileService.save(file);
+                beftnFileService.save(file);
                 message = "Uploaded the file successfully: " + file.getOriginalFilename();
                 String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                        .path("/api/download/")
+                        .path("/beftn/download/")
                         .path(fileNameWithoutExtension+".txt")
                         .toUriString();
 
@@ -63,27 +66,23 @@ public class ApiDataController {
         message = "Please upload a csv file!";
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage(message,""));
     }
-
-
-    @GetMapping("/apimodels")
-    public ResponseEntity<List<ApiDataModel>> getAllApiModels() {
+    @GetMapping("/beftnmodels")
+    public ResponseEntity<List<BeftnDataModel>> getAllBeftnModels() {
         try {
-            List<ApiDataModel> apiDataModels = fileService.getAllApiModels();
+            List<BeftnDataModel> beftnDataModels = beftnFileService.getAllBeftnModels();
 
-            if (apiDataModels.isEmpty()) {
+            if (beftnDataModels.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
-            return new ResponseEntity<>(apiDataModels, HttpStatus.OK);
+            return new ResponseEntity<>(beftnDataModels, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
     }
-
     @GetMapping("/download/{fileName:.+}")
+
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName) {
-        System.out.println("inside api controller.............................");
-        InputStreamResource file = new InputStreamResource(fileService.load());
+        InputStreamResource file = new InputStreamResource(beftnFileService.loadAllBeftnData());
         int extensionIndex = fileName.lastIndexOf(".");
         String fileNameWithoutExtension = fileName.substring(0,extensionIndex);
         return ResponseEntity.ok()
@@ -91,5 +90,4 @@ public class ApiDataController {
                 .contentType(MediaType.parseMediaType("application/csv"))
                 .body(file);
     }
-
 }
