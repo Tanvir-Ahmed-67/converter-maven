@@ -45,7 +45,7 @@ public class BeftnDataService {
         }
     }
 
-    public ByteArrayInputStream load() {
+    public ByteArrayInputStream loadAllBeftnData() {
         List<BeftnDataModel> beftnModels = repository.findAll();
         ByteArrayInputStream in = BeftnDataServiceHelper.beftnModelToCSV(beftnModels);
         return in;

@@ -51,7 +51,6 @@ public class BeftnDataServiceHelper {
 
     public static ByteArrayInputStream beftnModelToCSV(List<BeftnDataModel> beftnDataModelList) {
         final CSVFormat format = CSVFormat.DEFAULT.withDelimiter('|').withRecordSeparator("\r\n").withIgnoreEmptyLines(true);
-
         try (ByteArrayOutputStream out = new ByteArrayOutputStream();
              CSVPrinter csvPrinter = new CSVPrinter(new PrintWriter(out), format);) {
             for (BeftnDataModel beftnDataModel : beftnDataModelList) {
@@ -75,6 +74,7 @@ public class BeftnDataServiceHelper {
                         null,
                         "0"
                 );
+                System.out.println(("<<<<<<<<<<<<<<<<<<<<<<<<<<"+beftnDataModelList));
                 csvPrinter.printRecord(data);
             }
 

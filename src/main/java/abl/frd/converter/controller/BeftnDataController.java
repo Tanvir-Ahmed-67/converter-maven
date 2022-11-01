@@ -22,10 +22,11 @@ import java.util.List;
 @RequestMapping("/beftn")
 public class BeftnDataController {
 
-    private final BeftnDataService fileService;
+    private final BeftnDataService beftnFileService;
+
     @Autowired
     public BeftnDataController(BeftnDataService beftnDataService) {
-        this.fileService = beftnDataService;
+        this.beftnFileService = beftnDataService;
     }
 
     @GetMapping(value = "/index")
@@ -36,7 +37,7 @@ public class BeftnDataController {
     @GetMapping(value = "/cleardb")
     public ResponseEntity<ResponseMessage> clearDb() {
         String message = "Database Cleared!";
-        fileService.clearDatabase();
+        beftnFileService.clearDatabase();
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
     }
 
@@ -47,10 +48,10 @@ public class BeftnDataController {
             int extensionIndex = file.getOriginalFilename().lastIndexOf(".");
             String fileNameWithoutExtension = file.getOriginalFilename().substring(0,extensionIndex);
             try {
-                fileService.save(file);
+                beftnFileService.save(file);
                 message = "Uploaded the file successfully: " + file.getOriginalFilename();
                 String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                        .path("/api/download/")
+                        .path("/beftn/download/")
                         .path(fileNameWithoutExtension+".txt")
                         .toUriString();
 
@@ -68,7 +69,7 @@ public class BeftnDataController {
     @GetMapping("/beftnmodels")
     public ResponseEntity<List<BeftnDataModel>> getAllBeftnModels() {
         try {
-            List<BeftnDataModel> beftnDataModels = fileService.getAllBeftnModels();
+            List<BeftnDataModel> beftnDataModels = beftnFileService.getAllBeftnModels();
 
             if (beftnDataModels.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -79,8 +80,9 @@ public class BeftnDataController {
         }
     }
     @GetMapping("/download/{fileName:.+}")
+
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName) {
-        InputStreamResource file = new InputStreamResource(fileService.load());
+        InputStreamResource file = new InputStreamResource(beftnFileService.loadAllBeftnData());
         int extensionIndex = fileName.lastIndexOf(".");
         String fileNameWithoutExtension = fileName.substring(0,extensionIndex);
         return ResponseEntity.ok()

@@ -7,11 +7,11 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @Entity
 @Table(name = "beftn_data_table")
 public class BeftnDataModel {
+    @Id
     @Column(name = "row_id")
     @GeneratedValue(strategy = SEQUENCE, generator = "seqGen")
     @SequenceGenerator(name = "seqGen", sequenceName = "beftn_seq", initialValue = 1)
     private int id;
-    @Id
     @Column(name = "exCode")
     private String exCode;
     @Column(name = "tranNo")

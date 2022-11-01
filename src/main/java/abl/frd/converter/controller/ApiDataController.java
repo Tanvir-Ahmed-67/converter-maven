@@ -82,6 +82,7 @@ public class ApiDataController {
 
     @GetMapping("/download/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName) {
+        System.out.println("inside api controller.............................");
         InputStreamResource file = new InputStreamResource(fileService.load());
         int extensionIndex = fileName.lastIndexOf(".");
         String fileNameWithoutExtension = fileName.substring(0,extensionIndex);
