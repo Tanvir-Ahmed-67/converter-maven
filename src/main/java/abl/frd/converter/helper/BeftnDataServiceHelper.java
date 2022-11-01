@@ -74,7 +74,6 @@ public class BeftnDataServiceHelper {
                         null,
                         "0"
                 );
-                System.out.println(("<<<<<<<<<<<<<<<<<<<<<<<<<<"+beftnDataModelList));
                 csvPrinter.printRecord(data);
             }
 
