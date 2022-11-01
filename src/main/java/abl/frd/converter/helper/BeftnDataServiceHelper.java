@@ -50,36 +50,30 @@ public class BeftnDataServiceHelper {
     }
 
     public static ByteArrayInputStream beftnModelToCSV(List<BeftnDataModel> beftnDataModelList) {
-        final CSVFormat format = CSVFormat.DEFAULT.withQuoteMode(QuoteMode.NON_NUMERIC);
+        final CSVFormat format = CSVFormat.DEFAULT.withDelimiter('|').withRecordSeparator("\r\n").withIgnoreEmptyLines(true);
 
         try (ByteArrayOutputStream out = new ByteArrayOutputStream();
              CSVPrinter csvPrinter = new CSVPrinter(new PrintWriter(out), format);) {
             for (BeftnDataModel beftnDataModel : beftnDataModelList) {
                 List<Object> data = Arrays.asList(
-                        beftnDataModel.getTranNo(),
-                        "CRED",
-                        beftnDataModel.getEnteredDate(),
-                        beftnDataModel.getCurrency(),
+                        beftnDataModel.getExCode().trim(),
+                        beftnDataModel.getTranNo().trim(),
+                        beftnDataModel.getCurrency().trim(),
                         beftnDataModel.getAmount(),
-                        beftnDataModel.getRemitter(),
-                        beftnDataModel.getExCode(),
-                        beftnDataModel.getBankName(),
-                        beftnDataModel.getBranchName(),
-                        null,
-                        beftnDataModel.getBeneficiaryAccount(),
-                        beftnDataModel.getBeneficiary(),
-                        null,
-                        null,
-                        //apiModel.getBankCode(),
-                        "4006",
-                        //apiModel.getBranchCode(),
+                        beftnDataModel.getEnteredDate().trim(),
+                        beftnDataModel.getBeneficiary().trim(),
+                        beftnDataModel.getRemitter().trim(),
+                        beftnDataModel.getBeneficiaryAccount().trim(),
+                        beftnDataModel.getBankName().trim(),
+                        "11",
+                        beftnDataModel.getBranchName().trim(),
+                        beftnDataModel.getBranchCode().trim(),
                         null,
                         null,
                         null,
                         null,
                         null,
-                        null,
-                        null
+                        "0"
                 );
                 csvPrinter.printRecord(data);
             }
