@@ -16,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @Controller
-@CrossOrigin("http://localhost:8089")
+@CrossOrigin("http://localhost:8080")
 @RequestMapping("/ezremit")
 public class EzModelDataController {
     @Autowired
