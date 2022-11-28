@@ -70,9 +70,6 @@ public class ApiDataService {
 
     public void clearDatabase(){
         truncateApi_data_table();
-        // truncateHibernetSequenceTable();
-        truncateSeqTable();
-        initializeSeqTable();
     }
     public String modifyDateFormat(String date){
         DateFormat formatter;
@@ -90,18 +87,6 @@ public class ApiDataService {
     @Transactional
     public void truncateApi_data_table() {
         repository.truncateApiDataTable();
-    }
-    @Transactional
-    public void truncateHibernetSequenceTable() {
-        repository.truncateHibernateSequenceTable();
-    }
-    @Transactional
-    public void truncateSeqTable() {
-        repository.truncateSeqTable();
-    }
-    @Transactional
-    public void initializeSeqTable() {
-        repository.initializeSeqTable();
     }
 }
 

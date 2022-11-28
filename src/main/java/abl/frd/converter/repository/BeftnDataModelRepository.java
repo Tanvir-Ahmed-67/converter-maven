@@ -16,25 +16,4 @@ public interface BeftnDataModelRepository extends JpaRepository<BeftnDataModel, 
             nativeQuery = true
     )
     void truncateBeftnDataTable();
-    @Modifying
-    @Transactional
-    @Query(
-            value = "truncate table hibernate_sequence",
-            nativeQuery = true
-    )
-    void truncateHibernateSequenceTable();
-    @Modifying
-    @Transactional
-    @Query(
-            value = "truncate table beftn_seq",
-            nativeQuery = true
-    )
-    void truncateBeftnSeqTable();
-    @Modifying
-    @Transactional
-    @Query(
-            value = "insert into beftn_seq values('1')",
-            nativeQuery = true
-    )
-    void initializeBeftnSeqTable();
 }

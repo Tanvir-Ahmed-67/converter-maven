@@ -5,9 +5,7 @@ import javax.persistence.*;
 public class ExchangeCodeMapperModel {
     @Id
     @Column(name = "row_id")
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    //@GeneratedValue(strategy = SEQUENCE, generator = "seqGen")
-    //@SequenceGenerator(name = "seqGen", sequenceName = "seq", initialValue = 1)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
     @Column(name = "exName")
     private String exName;

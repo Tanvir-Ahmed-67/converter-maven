@@ -30,6 +30,7 @@ public class RiaDataController {
     }
     @GetMapping(value = "/index")
     public String homePage() {
+        riaDataService.clearDatabase();
         return "ria";
     }
     @GetMapping(value = "/cleardb")

@@ -31,6 +31,7 @@ public class BeftnDataController {
 
     @GetMapping(value = "/index")
     public String homePage() {
+        beftnFileService.clearDatabase();
         return "beftn";
     }
 

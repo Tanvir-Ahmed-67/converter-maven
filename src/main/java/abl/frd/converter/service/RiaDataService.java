@@ -34,9 +34,6 @@ public class RiaDataService {
 
     public void clearDatabase(){
         truncateRiaDataTable();
-        //truncateHibernetSequenceTable();
-        truncateRiaSeqTable();
-        initializeRiaSeqTable();
     }
 
     public List<RiaDataModel> getAllRiaDataModels() {
@@ -46,17 +43,5 @@ public class RiaDataService {
     @Transactional
     public void truncateRiaDataTable() {
         repository.truncateRiaDataTable();
-    }
-    @Transactional
-    public void truncateHibernetSequenceTable() {
-        repository.truncateHibernateSequenceTable();
-    }
-    @Transactional
-    public void truncateRiaSeqTable() {
-        repository.truncateRiaSeqTable();
-    }
-    @Transactional
-    public void initializeRiaSeqTable() {
-        repository.initializeRiaSeqTable();
     }
 }

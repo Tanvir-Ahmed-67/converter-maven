@@ -16,26 +16,6 @@ public interface RiaDataModelRepository extends JpaRepository<RiaDataModel, Inte
             nativeQuery = true
     )
     void truncateRiaDataTable();
-    @Modifying
-    @Transactional
-    @Query(
-            value = "truncate table hibernate_sequence",
-            nativeQuery = true
-    )
-    void truncateHibernateSequenceTable();
-    @Modifying
-    @Transactional
-    @Query(
-            value = "truncate table ria_seq",
-            nativeQuery = true
-    )
-    void truncateRiaSeqTable();
-    @Modifying
-    @Transactional
-    @Query(
-            value = "insert into ria_seq values('1')",
-            nativeQuery = true
-    )
-    void initializeRiaSeqTable();
+
 }
 

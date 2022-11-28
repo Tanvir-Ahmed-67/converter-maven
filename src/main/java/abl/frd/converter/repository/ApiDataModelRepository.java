@@ -16,26 +16,5 @@ public interface ApiDataModelRepository extends JpaRepository<ApiDataModel, Inte
             nativeQuery = true
     )
     void truncateApiDataTable();
-    @Modifying
-    @Transactional
-    @Query(
-            value = "truncate table hibernate_sequence",
-            nativeQuery = true
-    )
-    void truncateHibernateSequenceTable();
-    @Modifying
-    @Transactional
-    @Query(
-            value = "truncate table seq",
-            nativeQuery = true
-    )
-    void truncateSeqTable();
-    @Modifying
-    @Transactional
-    @Query(
-            value = "insert into seq values('1')",
-            nativeQuery = true
-    )
-    void initializeSeqTable();
 }
 
