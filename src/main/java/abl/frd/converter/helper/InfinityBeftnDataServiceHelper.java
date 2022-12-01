@@ -3,6 +3,7 @@ package abl.frd.converter.helper;
 import abl.frd.converter.model.ApiDataModel;
 import abl.frd.converter.model.InfinityBeftnModel;
 import org.apache.commons.csv.*;
+import org.apache.poi.hssf.usermodel.HSSFFormulaEvaluator;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.stereotype.Component;
@@ -49,9 +50,13 @@ public class InfinityBeftnDataServiceHelper {
                 while (cellIterator.hasNext()){
                     Cell cell = cellIterator.next();
                     System.out.println(".............................."+cell.getCellType());
-                    infinityBeftnModel.setTranNo(cell.getStringCellValue());
+
+                    DataFormatter df = new DataFormatter();
+                    String value = df.formatCellValue(cell);
+                    System.out.println("__________________"+value);
 
                     /*
+                    infinityBeftnModel.setTranNo(cell.getStringCellValue());
                     infinityBeftnModel.setCustomerNo(cell.getStringCellValue());
                     infinityBeftnModel.setRemitterName(cell.getStringCellValue());
                     infinityBeftnModel.setRemitterAccount(cell.getStringCellValue());
@@ -61,9 +66,7 @@ public class InfinityBeftnDataServiceHelper {
                     infinityBeftnModel.setBeneficiaryAccountType(cell.getStringCellValue());
                     infinityBeftnModel.setRoutingNumber(cell.getStringCellValue());
                     infinityBeftnModel.setCurrency(cell.getStringCellValue());
-                    //infinityBeftnModel.setAmount(cell.getNumericCellValue());
-
-
+                    infinityBeftnModel.setAmount(cell.getNumericCellValue());
                      */
 
                 }
