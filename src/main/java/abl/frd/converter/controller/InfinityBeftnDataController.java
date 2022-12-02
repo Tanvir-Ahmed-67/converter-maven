@@ -1,9 +1,8 @@
 package abl.frd.converter.controller;
 
 import abl.frd.converter.ResponseMessage;
-import abl.frd.converter.helper.RiaDataServiceHelper;
-import abl.frd.converter.model.RiaDataModel;
-import abl.frd.converter.service.RiaDataService;
+import abl.frd.converter.helper.InfinityBeftnDataServiceHelper;
+import abl.frd.converter.service.InfinityBeftnDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -16,44 +15,41 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.util.List;
-
 @Controller
-@CrossOrigin("http://localhost:8080")
-@RequestMapping("/ria")
-public class RiaDataController {
-    @Autowired
-    private final RiaDataService riaDataService;
+@CrossOrigin("http://localhost:8089")
+@RequestMapping("/infinity-beftn")
+public class InfinityBeftnDataController {
+    private final InfinityBeftnDataService infinityBeftnDataService;
 
-    public RiaDataController(RiaDataService riaDataService){
-        this.riaDataService = riaDataService;
+    @Autowired
+    public InfinityBeftnDataController(InfinityBeftnDataService infinityBeftnDataService){
+        this.infinityBeftnDataService = infinityBeftnDataService;
     }
     @GetMapping(value = "/index")
     public String homePage() {
-        riaDataService.clearDatabase();
-        return "ria";
+        infinityBeftnDataService.clearDatabase();
+        return "infinityBeftn";
     }
+
     @GetMapping(value = "/cleardb")
     public ResponseEntity<ResponseMessage> clearDb() {
         String message = "Database Cleared!";
-        riaDataService.clearDatabase();
+        infinityBeftnDataService.clearDatabase();
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
     }
-
     @PostMapping("/upload")
     public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
         String message = "";
-        if (RiaDataServiceHelper.hasCSVFormat(file)) {
+        if (InfinityBeftnDataServiceHelper.hasCSVFormat(file)) {
             int extensionIndex = file.getOriginalFilename().lastIndexOf(".");
             String fileNameWithoutExtension = file.getOriginalFilename().substring(0, extensionIndex);
             try {
-                riaDataService.save(file);
+                infinityBeftnDataService.save(file);
                 message = "Uploaded the file successfully: " + file.getOriginalFilename();
                 String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                        .path("/ria/download/")
+                        .path("/infinity-beftn/download/")
                         .path(fileNameWithoutExtension + ".txt")
                         .toUriString();
-
                 return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message, fileDownloadUri));
             } catch (Exception e) {
                 e.printStackTrace();
@@ -65,24 +61,9 @@ public class RiaDataController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage(message,""));
     }
 
-    @GetMapping("/riamodels")
-    public ResponseEntity<List<RiaDataModel>> getAllRiaDataModels() {
-        try {
-            List<RiaDataModel> riaDataModels = riaDataService.getAllRiaDataModels();
-
-            if (riaDataModels.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
-            return new ResponseEntity<>(riaDataModels, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-    }
-
     @GetMapping("/download/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName) {
-        InputStreamResource file = new InputStreamResource(riaDataService.load());
+        InputStreamResource file = new InputStreamResource(infinityBeftnDataService.load());
         int extensionIndex = fileName.lastIndexOf(".");
         String fileNameWithoutExtension = fileName.substring(0,extensionIndex);
         return ResponseEntity.ok()
@@ -90,6 +71,4 @@ public class RiaDataController {
                 .contentType(MediaType.parseMediaType("application/csv"))
                 .body(file);
     }
-
-
 }

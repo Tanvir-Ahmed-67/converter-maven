@@ -28,6 +28,7 @@ public class ApiDataController {
     }
     @GetMapping(value = "/index")
     public String homePage() {
+        fileService.clearDatabase();
         return "api";
     }
 

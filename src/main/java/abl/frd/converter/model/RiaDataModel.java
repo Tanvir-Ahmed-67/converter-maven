@@ -8,9 +8,7 @@ import static javax.persistence.GenerationType.SEQUENCE;
 public class RiaDataModel {
     @Id
     @Column(name = "row_id")
-    //@GeneratedValue(strategy=GenerationType.AUTO)
-    @GeneratedValue(strategy = SEQUENCE, generator = "riaSeqGen")
-    @SequenceGenerator(name = "riaSeqGen", sequenceName = "ria_seq", initialValue = 1)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;
     @Column(name = "pin")
     private String pin;

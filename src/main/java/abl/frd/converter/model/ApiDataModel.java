@@ -7,9 +7,7 @@ import static javax.persistence.GenerationType.SEQUENCE;
 public class ApiDataModel {
     @Id
     @Column(name = "row_id")
-    //@GeneratedValue(strategy=GenerationType.AUTO)
-    @GeneratedValue(strategy = SEQUENCE, generator = "seqGen")
-    @SequenceGenerator(name = "seqGen", sequenceName = "seq", initialValue = 1)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;
     @Column(name = "exCode")
     private String exCode;

@@ -60,24 +60,10 @@ public class BeftnDataService {
 
     public void clearDatabase(){
         truncateBeftnDataTable();
-        // truncateHibernetSequenceTable();
-        truncateBeftnSeqTable();
-        initializeBeftnSeqTable();
     }
     @Transactional
     public void truncateBeftnDataTable() {
         repository.truncateBeftnDataTable();
     }
-    @Transactional
-    public void truncateHibernetSequenceTable() {
-        repository.truncateHibernateSequenceTable();
-    }
-    @Transactional
-    public void truncateBeftnSeqTable() {
-        repository.truncateBeftnSeqTable();
-    }
-    @Transactional
-    public void initializeBeftnSeqTable() {
-        repository.initializeBeftnSeqTable();
-    }
+
 }
