@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Basic Bootstrap Template</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/loadFunction.js"></script>
+    <script type="text/javascript" src="/js/main.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row" style="border:1px solid black; border-radius:10px; height:100px; text-align:center;background-color:#008A05">
+        <h2>Agrani Bank Limited, Foreign Remittance Division</h2>
+    </div>
+    <div class="row" >
+        <div class="col-md-2" style="border:1px solid black; border-radius:10px; height:500px">
+            <br />
+            <ul class="nav nav-pills nav-stacked tabsLinks" style="text-align:center" id="myTab">
+                <li><a href="#" class="nav-link btn btn-primary" role="button" onclick='loadapi("template","api.html")'>API</a></li>
+                <li><a href="#" class="nav-link btn btn-primary" role="button" onclick='loadbeftn("template","beftn.html")'>BEFTN</a></li>
+                <li><a href="#" class="nav-link btn btn-primary" role="button" onclick='loadria("template","ria.html")'>RIA</a></li>
+                <li><a href="#" class="nav-link btn btn-primary" role="button">EZ REMIT</a></li>
+                <li><a href="#" class="nav-link btn btn-primary" role="button">INFINITY BEFTN</a></li>
+                <li><a href="#" class="nav-link btn btn-primary" role="button">COC</a></li>
+            </ul>
+        </div>
+        <div class="col-md-10" style="border:1px solid black;border-radius:10px; height:500px">
+            <div id="template" class="template">
+                <p>This is API</p>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="border:1px solid black; border-radius:10px; text-align:center; background-color:#008A05">
+        <p>copyright @ Agrani Bank Limited</p>
+    </div>
+</div>
+</body>
+</html>
