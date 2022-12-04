@@ -1,14 +1,11 @@
 package abl.frd.converter.helper;
 
-import abl.frd.converter.model.ApiDataModel;
 import abl.frd.converter.model.InfinityBeftnModel;
 import org.apache.commons.csv.*;
-import org.apache.poi.hssf.usermodel.HSSFFormulaEvaluator;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,7 +55,7 @@ public class InfinityBeftnDataServiceHelper {
                 infinityBeftnModel.setRemitterAccount(eachCell.get(3));
                 infinityBeftnModel.setRemitterAccountType(eachCell.get(4));
                 infinityBeftnModel.setBeneficiaryName(eachCell.get(5));
-                infinityBeftnModel.setBeneficiaryAccount(eachCell.get(6));
+                infinityBeftnModel.setBeneficiaryAccount(eachCell.get(6).replaceAll(".",""));
                 infinityBeftnModel.setBeneficiaryAccountType(eachCell.get(7));
                 infinityBeftnModel.setRoutingNumber(eachCell.get(8));
                 infinityBeftnModel.setCurrency(eachCell.get(9));
@@ -87,7 +84,7 @@ public class InfinityBeftnDataServiceHelper {
                         infinityBeftnModel.getCurrency(),
                         infinityBeftnModel.getAmount(),
                         infinityBeftnModel.getRemitterName(),
-                        infinityBeftnModel.getExCode(),
+                        "7010228",
                         null,
                         null,
                         null,
