@@ -49,21 +49,22 @@ public class InfinityBeftnDataServiceHelper {
                     DataFormatter df = new DataFormatter();
                     eachCell.add(df.formatCellValue(cell));
                 }
-                infinityBeftnModel.setTranNo(eachCell.get(0));
-                infinityBeftnModel.setCustomerNo(eachCell.get(1));
-                infinityBeftnModel.setRemitterName(eachCell.get(2));
-                infinityBeftnModel.setRemitterAccount(eachCell.get(3));
-                infinityBeftnModel.setRemitterAccountType(eachCell.get(4));
-                infinityBeftnModel.setBeneficiaryName(eachCell.get(5));
-                infinityBeftnModel.setBeneficiaryAccount(eachCell.get(6).replaceAll(".",""));
-                infinityBeftnModel.setBeneficiaryAccountType(eachCell.get(7));
-                infinityBeftnModel.setRoutingNumber(eachCell.get(8));
-                infinityBeftnModel.setCurrency(eachCell.get(9));
-                infinityBeftnModel.setAmount(Double.parseDouble(eachCell.get(10).replaceAll(",","")));
-
-                infinityBeftnModelList.add(infinityBeftnModel);
-                eachCell.clear();
-                count++;
+                if(!eachCell.isEmpty()) {
+                    infinityBeftnModel.setTranNo(eachCell.get(0));
+                    infinityBeftnModel.setCustomerNo(eachCell.get(1));
+                    infinityBeftnModel.setRemitterName(eachCell.get(2));
+                    infinityBeftnModel.setRemitterAccount(eachCell.get(3));
+                    infinityBeftnModel.setRemitterAccountType(eachCell.get(4));
+                    infinityBeftnModel.setBeneficiaryName(eachCell.get(5));
+                    infinityBeftnModel.setBeneficiaryAccount(eachCell.get(6).replaceAll("\\.", ""));
+                    infinityBeftnModel.setBeneficiaryAccountType(eachCell.get(7));
+                    infinityBeftnModel.setRoutingNumber(eachCell.get(8));
+                    infinityBeftnModel.setCurrency(eachCell.get(9));
+                    infinityBeftnModel.setAmount(Double.parseDouble(eachCell.get(10).replaceAll(",", "")));
+                    infinityBeftnModelList.add(infinityBeftnModel);
+                    eachCell.clear();
+                    count++;
+                }
             }
             return infinityBeftnModelList;
         } catch (IOException e) {
