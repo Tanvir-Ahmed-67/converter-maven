@@ -1,6 +1,5 @@
 package abl.frd.converter.helper;
 
-import abl.frd.converter.model.ApiDataModel;
 import abl.frd.converter.model.BeftnDataModel;
 import org.apache.commons.csv.*;
 import org.springframework.stereotype.Component;
@@ -50,11 +49,35 @@ public class BeftnDataServiceHelper {
     }
 
     public static ByteArrayInputStream beftnModelToCSV(List<BeftnDataModel> beftnDataModelList) {
-        final CSVFormat format = CSVFormat.DEFAULT.withDelimiter('|').withRecordSeparator("\r\n").withIgnoreEmptyLines(true);
+        final CSVFormat format = CSVFormat.DEFAULT.withQuoteMode(QuoteMode.NON_NUMERIC);
         try (ByteArrayOutputStream out = new ByteArrayOutputStream();
              CSVPrinter csvPrinter = new CSVPrinter(new PrintWriter(out), format);) {
             for (BeftnDataModel beftnDataModel : beftnDataModelList) {
                 List<Object> data = Arrays.asList(
+                        beftnDataModel.getTranNo().trim(),
+                        "CRED",
+                        beftnDataModel.getEnteredDate().trim(),
+                        beftnDataModel.getCurrency().trim(),
+                        beftnDataModel.getAmount(),
+                        beftnDataModel.getRemitter(),
+                        beftnDataModel.getExCode(),
+                        beftnDataModel.getBankName(),
+                        beftnDataModel.getBranchName(),
+                        null,
+                        beftnDataModel.getBeneficiaryAccount(),
+                        beftnDataModel.getBeneficiary(),
+                        null,
+                        null,
+                        beftnDataModel.getBranchCode(),
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null
+
+/*
                         beftnDataModel.getExCode().trim(),
                         beftnDataModel.getTranNo().trim(),
                         beftnDataModel.getCurrency().trim(),
@@ -73,6 +96,8 @@ public class BeftnDataServiceHelper {
                         null,
                         null,
                         "0"
+
+ */
                 );
                 csvPrinter.printRecord(data);
             }
