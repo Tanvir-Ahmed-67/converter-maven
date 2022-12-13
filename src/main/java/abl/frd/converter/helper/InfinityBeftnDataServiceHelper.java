@@ -1,14 +1,11 @@
 package abl.frd.converter.helper;
 
-import abl.frd.converter.model.ApiDataModel;
 import abl.frd.converter.model.InfinityBeftnModel;
 import org.apache.commons.csv.*;
-import org.apache.poi.hssf.usermodel.HSSFFormulaEvaluator;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,7 +30,6 @@ public class InfinityBeftnDataServiceHelper {
             //Iterate through each rows one by one
              Iterator<Row> rowIterator = worksheet.iterator();
             List<InfinityBeftnModel> infinityBeftnModelList = new ArrayList<>();
-            DataFormatter formatter = new DataFormatter();
             Row row = null;
             rowIterator.next();
             int count=0;
@@ -47,32 +43,28 @@ public class InfinityBeftnDataServiceHelper {
 
                 //For each row, iterate through all the columns
                 Iterator<Cell> cellIterator = row.cellIterator();
+                List<String> eachCell = new ArrayList<>();
                 while (cellIterator.hasNext()){
                     Cell cell = cellIterator.next();
-                    System.out.println(".............................."+cell.getCellType());
-
                     DataFormatter df = new DataFormatter();
-                    String value = df.formatCellValue(cell);
-                    System.out.println("__________________"+value);
-
-                    /*
-                    infinityBeftnModel.setTranNo(cell.getStringCellValue());
-                    infinityBeftnModel.setCustomerNo(cell.getStringCellValue());
-                    infinityBeftnModel.setRemitterName(cell.getStringCellValue());
-                    infinityBeftnModel.setRemitterAccount(cell.getStringCellValue());
-                    infinityBeftnModel.setRemitterAccountType(cell.getStringCellValue());
-                    infinityBeftnModel.setBeneficiaryName(cell.getStringCellValue());
-                    infinityBeftnModel.setBeneficiaryAccount(cell.getStringCellValue());
-                    infinityBeftnModel.setBeneficiaryAccountType(cell.getStringCellValue());
-                    infinityBeftnModel.setRoutingNumber(cell.getStringCellValue());
-                    infinityBeftnModel.setCurrency(cell.getStringCellValue());
-                    infinityBeftnModel.setAmount(cell.getNumericCellValue());
-                     */
-
+                    eachCell.add(df.formatCellValue(cell));
                 }
-                System.out.println("######################");
-                infinityBeftnModelList.add(infinityBeftnModel);
-                count++;
+                if(!eachCell.isEmpty()) {
+                    infinityBeftnModel.setTranNo(eachCell.get(0));
+                    infinityBeftnModel.setCustomerNo(eachCell.get(1));
+                    infinityBeftnModel.setRemitterName(eachCell.get(2));
+                    infinityBeftnModel.setRemitterAccount(eachCell.get(3));
+                    infinityBeftnModel.setRemitterAccountType(eachCell.get(4));
+                    infinityBeftnModel.setBeneficiaryName(eachCell.get(5));
+                    infinityBeftnModel.setBeneficiaryAccount(eachCell.get(6).replaceAll("\\.", ""));
+                    infinityBeftnModel.setBeneficiaryAccountType(eachCell.get(7));
+                    infinityBeftnModel.setRoutingNumber(eachCell.get(8));
+                    infinityBeftnModel.setCurrency(eachCell.get(9));
+                    infinityBeftnModel.setAmount(Double.parseDouble(eachCell.get(10).replaceAll(",", "")));
+                    infinityBeftnModelList.add(infinityBeftnModel);
+                    eachCell.clear();
+                    count++;
+                }
             }
             return infinityBeftnModelList;
         } catch (IOException e) {
@@ -93,7 +85,7 @@ public class InfinityBeftnDataServiceHelper {
                         infinityBeftnModel.getCurrency(),
                         infinityBeftnModel.getAmount(),
                         infinityBeftnModel.getRemitterName(),
-                        infinityBeftnModel.getExCode(),
+                        "7010228",
                         null,
                         null,
                         null,
