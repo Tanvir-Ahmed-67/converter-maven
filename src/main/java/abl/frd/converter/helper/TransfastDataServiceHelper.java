@@ -1,11 +1,10 @@
 package abl.frd.converter.helper;
-
 import abl.frd.converter.model.TransfastDataModel;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -25,7 +24,7 @@ public class TransfastDataServiceHelper {
     }
     public static List<TransfastDataModel> csvToTransfastDataModels(InputStream is) {
         try{
-            Workbook records = new HSSFWorkbook(is);
+            Workbook records = new XSSFWorkbook(is);
             Sheet worksheet = records.getSheetAt(0);
             //Iterate through each rows one by one
             Iterator<Row> rowIterator = worksheet.iterator();
@@ -52,7 +51,7 @@ public class TransfastDataServiceHelper {
                 }
                 if(!eachCell.isEmpty()) {
                     transfastDataModel.setReferenceNo(eachCell.get(0));
-                    System.out.println("test........2........");
+                    System.out.println("test........2........"+transfastDataModel.toString());
                     /*
                     transfastDataModel.setCustomerNo(eachCell.get(1));
                     transfastDataModel.setRemitterName(eachCell.get(2));
