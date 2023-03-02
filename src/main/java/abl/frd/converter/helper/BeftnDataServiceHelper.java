@@ -77,27 +77,6 @@ public class BeftnDataServiceHelper {
                         null,
                         null
 
-/*
-                        beftnDataModel.getExCode().trim(),
-                        beftnDataModel.getTranNo().trim(),
-                        beftnDataModel.getCurrency().trim(),
-                        beftnDataModel.getAmount(),
-                        beftnDataModel.getEnteredDate().trim(),
-                        beftnDataModel.getBeneficiary().trim(),
-                        beftnDataModel.getRemitter().trim(),
-                        beftnDataModel.getBeneficiaryAccount().trim(),
-                        beftnDataModel.getBankName().trim(),
-                        "11",
-                        beftnDataModel.getBranchName().trim(),
-                        beftnDataModel.getBranchCode().trim(),
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        "0"
-
- */
                 );
                 csvPrinter.printRecord(data);
             }
