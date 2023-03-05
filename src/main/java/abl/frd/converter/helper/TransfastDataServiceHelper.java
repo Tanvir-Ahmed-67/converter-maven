@@ -31,16 +31,18 @@ public class TransfastDataServiceHelper {
             List<TransfastDataModel> transfastDataModelList = new ArrayList<>();
             Row row = null;
             rowIterator.next();
+            System.out.println("Servicehelper.........1.......");
             int count=0;
-            System.out.println("test.........1.......");
             while (rowIterator.hasNext()){
-                if(count==0){
-                    row = rowIterator.next();
-                    count++;
+                if(count<=5) {
+                    // ignore first 5 rows. Data is started from 6th row. So we need to skip first 5th row
+                    for (int i = 0; i < 5; i++) {
+                        row = rowIterator.next();
+                        count++;
+                        System.out.println(count);
+                    }
                 }
                 TransfastDataModel transfastDataModel = new TransfastDataModel();
-                row = rowIterator.next();
-
                 //For each row, iterate through all the columns
                 Iterator<Cell> cellIterator = row.cellIterator();
                 List<String> eachCell = new ArrayList<>();
@@ -50,26 +52,35 @@ public class TransfastDataServiceHelper {
                     eachCell.add(df.formatCellValue(cell));
                 }
                 if(!eachCell.isEmpty()) {
-                    transfastDataModel.setReferenceNo(eachCell.get(0));
-                    System.out.println("test........2........"+transfastDataModel.toString());
-                    /*
-                    transfastDataModel.setCustomerNo(eachCell.get(1));
-                    transfastDataModel.setRemitterName(eachCell.get(2));
-                    transfastDataModel.setRemitterAccount(eachCell.get(3));
-                    transfastDataModel.setRemitterAccountType(eachCell.get(4));
-                    transfastDataModel.setBeneficiaryName(eachCell.get(5));
-                    transfastDataModel.setBeneficiaryAccount(eachCell.get(6).replaceAll("\\.", ""));
-                    transfastDataModel.setBeneficiaryAccountType(eachCell.get(7));
-                    transfastDataModel.setRoutingNumber(eachCell.get(8));
-*/
-                    transfastDataModel.setCurrency(eachCell.get(9));
-                    transfastDataModel.setAmount(Double.parseDouble(eachCell.get(10).replaceAll(",", "")));
+                    transfastDataModel.setTfPin(eachCell.get(0));
+                    transfastDataModel.setReferenceNo(eachCell.get(1));
+                    transfastDataModel.setInvoiceNo(eachCell.get(2));
+                    transfastDataModel.setAmount(Double.parseDouble(eachCell.get(3).replaceAll(",", "")));
+                    transfastDataModel.setCurrency(eachCell.get(4));
+                    transfastDataModel.setEnteredDate(eachCell.get(5));
+
+                    transfastDataModel.setRemitter(eachCell.get(6));
+                    transfastDataModel.setRemitterId(eachCell.get(7));
+                    transfastDataModel.setRemitterCountryName(eachCell.get(8));
+                    transfastDataModel.setRemitterCityName(eachCell.get(9));
+                    transfastDataModel.setRemitterAdress(eachCell.get(10));
+
+                    transfastDataModel.setBeneficiary(eachCell.get(12));
+                    transfastDataModel.setBeneficiaryAdress(eachCell.get(13));
+                    transfastDataModel.setBeneficiaryCityName(eachCell.get(14));
+                    transfastDataModel.setBeneficiaryCountryName(eachCell.get(15));
+                    transfastDataModel.setBeneficiaryPhone(eachCell.get(16));
+
+                    transfastDataModel.setBranchCode(eachCell.get(17));
+                    transfastDataModel.setBranchName(eachCell.get(18));
+                    transfastDataModel.setBankName(eachCell.get(19));
+                    transfastDataModel.setBeneficiaryAccount(eachCell.get(20));
+
                     transfastDataModelList.add(transfastDataModel);
                     eachCell.clear();
-                    count++;
                 }
             }
-            System.out.println("test.......3.........");
+            System.out.println("service helper........2........"+transfastDataModelList.toString());
             return transfastDataModelList;
         } catch (IOException e) {
             throw new RuntimeException("fail to parse CSV file: " + e.getMessage());
