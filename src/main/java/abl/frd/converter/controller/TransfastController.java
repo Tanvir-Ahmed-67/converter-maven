@@ -35,13 +35,10 @@ public class TransfastController {
     @PostMapping("/upload")
     public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
         String message = "";
-        System.out.println("inside controller");
         if (TransfastDataServiceHelper.hasCSVFormat(file)) {
-            System.out.println("inside controller 1");
             int extensionIndex = file.getOriginalFilename().lastIndexOf(".");
             String fileNameWithoutExtension = file.getOriginalFilename().substring(0, extensionIndex);
             try {
-                System.out.println("inside controller 2");
                 transfastDataService.save(file);
                 message = "Uploaded the file successfully: " + file.getOriginalFilename();
                 String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()

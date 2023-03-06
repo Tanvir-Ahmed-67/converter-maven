@@ -31,18 +31,18 @@ public class TransfastDataServiceHelper {
             List<TransfastDataModel> transfastDataModelList = new ArrayList<>();
             Row row = null;
             rowIterator.next();
-            System.out.println("Servicehelper.........1.......");
-            int count=0;
+            boolean flag= false;
             while (rowIterator.hasNext()){
-                if(count<=5) {
-                    // ignore first 5 rows. Data is started from 6th row. So we need to skip first 5th row
-                    for (int i = 0; i < 5; i++) {
+                if(flag==false){
+                    for(int i=0; i<4; i++){
+                        // Ignoring first 5 rows. Data is started from 6th row. So we need to skip first 5th row
                         row = rowIterator.next();
-                        count++;
-                        System.out.println(count);
                     }
+                    flag=true;
                 }
+
                 TransfastDataModel transfastDataModel = new TransfastDataModel();
+                row = rowIterator.next();
                 //For each row, iterate through all the columns
                 Iterator<Cell> cellIterator = row.cellIterator();
                 List<String> eachCell = new ArrayList<>();
