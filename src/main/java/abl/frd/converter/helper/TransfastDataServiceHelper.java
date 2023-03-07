@@ -1,13 +1,18 @@
 package abl.frd.converter.helper;
+import abl.frd.converter.model.InfinityBeftnModel;
 import abl.frd.converter.model.TransfastDataModel;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.csv.QuoteMode;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-import java.io.IOException;
-import java.io.InputStream;
+
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -80,10 +85,43 @@ public class TransfastDataServiceHelper {
                     eachCell.clear();
                 }
             }
-            System.out.println("service helper........2........"+transfastDataModelList.toString());
             return transfastDataModelList;
         } catch (IOException e) {
             throw new RuntimeException("fail to parse CSV file: " + e.getMessage());
+        }
+    }
+
+    public static ByteArrayInputStream transfastModelToCSV(List<TransfastDataModel> transfastDataModelList) {
+        final CSVFormat format = CSVFormat.DEFAULT.withQuoteMode(QuoteMode.NON_NUMERIC);
+        try (ByteArrayOutputStream out = new ByteArrayOutputStream();
+             CSVPrinter csvPrinter = new CSVPrinter(new PrintWriter(out), format);) {
+            for (TransfastDataModel transfastDataModel : transfastDataModelList) {
+                List<Object> data = Arrays.asList(
+                        "7040",
+                        transfastDataModel.getTfPin().trim(),
+                        transfastDataModel.getCurrency(),
+                        transfastDataModel.getAmount(),
+                        transfastDataModel.getEnteredDate(),
+                        transfastDataModel.getBeneficiary().trim(),
+                        transfastDataModel.getRemitter().trim(),
+                        transfastDataModel.getBeneficiaryAccount().trim(),
+                        transfastDataModel.getBankName().trim(),
+                        "11",   // Bank Code
+                        transfastDataModel.getBranchName().trim(),
+                        transfastDataModel.getBranchCode().trim(),
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        "0"
+                );
+                csvPrinter.printRecord(data);
+            }
+            csvPrinter.flush();
+            return new ByteArrayInputStream(out.toByteArray());
+        } catch (IOException e) {
+            throw new RuntimeException("fail to import data to CSV file: " + e.getMessage());
         }
     }
 }
