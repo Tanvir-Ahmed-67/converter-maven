@@ -56,7 +56,7 @@ public class TransfastDataServiceHelper {
                     DataFormatter df = new DataFormatter();
                     eachCell.add(df.formatCellValue(cell));
                 }
-                if(!eachCell.isEmpty()) {
+                if(!eachCell.isEmpty() && eachCell.size()==21) {
                     transfastDataModel.setTfPin(eachCell.get(0));
                     transfastDataModel.setReferenceNo(eachCell.get(1));
                     transfastDataModel.setInvoiceNo(eachCell.get(2));
@@ -85,6 +85,9 @@ public class TransfastDataServiceHelper {
                     eachCell.clear();
                 }
             }
+            if(transfastDataModelList.isEmpty()){
+                throw new IOException();
+            }
             return transfastDataModelList;
         } catch (IOException e) {
             throw new RuntimeException("fail to parse CSV file: " + e.getMessage());
@@ -92,36 +95,37 @@ public class TransfastDataServiceHelper {
     }
 
     public static ByteArrayInputStream transfastModelToCSV(List<TransfastDataModel> transfastDataModelList) {
-        final CSVFormat format = CSVFormat.DEFAULT.withQuoteMode(QuoteMode.NON_NUMERIC);
-        try (ByteArrayOutputStream out = new ByteArrayOutputStream();
-             CSVPrinter csvPrinter = new CSVPrinter(new PrintWriter(out), format);) {
-            for (TransfastDataModel transfastDataModel : transfastDataModelList) {
-                List<Object> data = Arrays.asList(
-                        "7040",
-                        transfastDataModel.getTfPin().trim(),
-                        transfastDataModel.getCurrency(),
-                        transfastDataModel.getAmount(),
-                        transfastDataModel.getEnteredDate(),
-                        transfastDataModel.getBeneficiary().trim(),
-                        transfastDataModel.getRemitter().trim(),
-                        transfastDataModel.getBeneficiaryAccount().trim(),
-                        transfastDataModel.getBankName().trim(),
-                        "11",   // Bank Code
-                        transfastDataModel.getBranchName().trim(),
-                        transfastDataModel.getBranchCode().trim(),
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        "0"
-                );
-                csvPrinter.printRecord(data);
-            }
-            csvPrinter.flush();
-            return new ByteArrayInputStream(out.toByteArray());
-        } catch (IOException e) {
-            throw new RuntimeException("fail to import data to CSV file: " + e.getMessage());
-        }
+
+           final CSVFormat format = CSVFormat.DEFAULT.withQuoteMode(QuoteMode.NON_NUMERIC);
+           try (ByteArrayOutputStream out = new ByteArrayOutputStream();
+                CSVPrinter csvPrinter = new CSVPrinter(new PrintWriter(out), format);) {
+                   for (TransfastDataModel transfastDataModel : transfastDataModelList) {
+                       List<Object> data = Arrays.asList(
+                               "7040",
+                               transfastDataModel.getTfPin().trim(),
+                               transfastDataModel.getCurrency(),
+                               transfastDataModel.getAmount(),
+                               transfastDataModel.getEnteredDate(),
+                               transfastDataModel.getBeneficiary().trim(),
+                               transfastDataModel.getRemitter().trim(),
+                               transfastDataModel.getBeneficiaryAccount().trim(),
+                               transfastDataModel.getBankName().trim(),
+                               "11",   // Bank Code
+                               transfastDataModel.getBranchName().trim(),
+                               transfastDataModel.getBranchCode().trim(),
+                               null,
+                               null,
+                               null,
+                               null,
+                               null,
+                               "0"
+                       );
+                       csvPrinter.printRecord(data);
+                   }
+               csvPrinter.flush();
+               return new ByteArrayInputStream(out.toByteArray());
+           } catch (IOException e) {
+               throw new RuntimeException("fail to import data to CSV file: " + e.getMessage());
+           }
     }
 }
