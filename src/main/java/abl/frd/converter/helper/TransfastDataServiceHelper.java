@@ -1,10 +1,8 @@
 package abl.frd.converter.helper;
-import abl.frd.converter.model.InfinityBeftnModel;
 import abl.frd.converter.model.TransfastDataModel;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.QuoteMode;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Component;
@@ -56,30 +54,28 @@ public class TransfastDataServiceHelper {
                     DataFormatter df = new DataFormatter();
                     eachCell.add(df.formatCellValue(cell));
                 }
-                if(!eachCell.isEmpty() && eachCell.size()==21) {
-                    transfastDataModel.setTfPin(eachCell.get(0));
-                    transfastDataModel.setReferenceNo(eachCell.get(1));
-                    transfastDataModel.setInvoiceNo(eachCell.get(2));
-                    transfastDataModel.setAmount(Double.parseDouble(eachCell.get(3).replaceAll(",", "")));
-                    transfastDataModel.setCurrency(eachCell.get(4));
-                    transfastDataModel.setEnteredDate(eachCell.get(5));
-
+                if(!eachCell.isEmpty() && eachCell.size()==22) {
+                    transfastDataModel.setInvoiceNo(eachCell.get(0));
+                    transfastDataModel.setTfPin(eachCell.get(1));
+                    transfastDataModel.setReferenceNo(eachCell.get(2));
+                    transfastDataModel.setInvoiceDate(eachCell.get(3));
+                    transfastDataModel.setPaidDate(eachCell.get(4));
+                    transfastDataModel.setStatus(eachCell.get(5));
                     transfastDataModel.setRemitter(eachCell.get(6));
-                    transfastDataModel.setRemitterId(eachCell.get(7));
-                    transfastDataModel.setRemitterCountryName(eachCell.get(8));
-                    transfastDataModel.setRemitterCityName(eachCell.get(9));
-                    transfastDataModel.setRemitterAdress(eachCell.get(10));
-
-                    transfastDataModel.setBeneficiary(eachCell.get(12));
-                    transfastDataModel.setBeneficiaryAdress(eachCell.get(13));
-                    transfastDataModel.setBeneficiaryCityName(eachCell.get(14));
-                    transfastDataModel.setBeneficiaryCountryName(eachCell.get(15));
-                    transfastDataModel.setBeneficiaryPhone(eachCell.get(16));
-
-                    transfastDataModel.setBranchCode(eachCell.get(17));
-                    transfastDataModel.setBranchName(eachCell.get(18));
-                    transfastDataModel.setBankName(eachCell.get(19));
-                    transfastDataModel.setBeneficiaryAccount(eachCell.get(20));
+                    transfastDataModel.setBeneficiary(eachCell.get(7));
+                    transfastDataModel.setBeneficiaryAccount(eachCell.get(9));
+                    transfastDataModel.setBranchName(eachCell.get(10));
+                    transfastDataModel.setBranchCode(eachCell.get(11));
+                    transfastDataModel.setPayingBranchRoutingNo(eachCell.get(12));
+                    transfastDataModel.setPayingBankBranchName(eachCell.get(13));
+                    transfastDataModel.setBankName(eachCell.get(14));
+                    transfastDataModel.setBeneficiaryState(eachCell.get(15));
+                    transfastDataModel.setBeneficiaryCityName(eachCell.get(16));
+                    transfastDataModel.setCashierName(eachCell.get(17));
+                    transfastDataModel.setAmountDoller(Double.parseDouble(eachCell.get(18).replaceAll(",", "")));
+                    transfastDataModel.setAmountLocal(Double.parseDouble(eachCell.get(19).replaceAll(",", "")));
+                    transfastDataModel.setBeneficiaryPhone(eachCell.get(20));
+                    transfastDataModel.setRemitterCountry(eachCell.get(21));
 
                     transfastDataModelList.add(transfastDataModel);
                     eachCell.clear();
@@ -103,16 +99,16 @@ public class TransfastDataServiceHelper {
                        List<Object> data = Arrays.asList(
                                "7040",
                                transfastDataModel.getTfPin().trim(),
-                               transfastDataModel.getCurrency(),
-                               transfastDataModel.getAmount(),
-                               transfastDataModel.getEnteredDate(),
+                               "BDT",  // Currency
+                               transfastDataModel.getAmountLocal(),
+                               transfastDataModel.getPaidDate(),
                                transfastDataModel.getBeneficiary().trim(),
                                transfastDataModel.getRemitter().trim(),
                                transfastDataModel.getBeneficiaryAccount().trim(),
                                transfastDataModel.getBankName().trim(),
                                "11",   // Bank Code
                                transfastDataModel.getBranchName().trim(),
-                               transfastDataModel.getBranchCode().trim(),
+                               transfastDataModel.getPayingBranchRoutingNo().trim(),
                                null,
                                null,
                                null,
