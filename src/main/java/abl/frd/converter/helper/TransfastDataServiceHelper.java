@@ -7,6 +7,7 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+import org.apache.poi.ss.usermodel.Row.MissingCellPolicy;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -26,6 +27,104 @@ public class TransfastDataServiceHelper {
         return false;
     }
     public static List<TransfastDataModel> csvToTransfastDataModels(InputStream is) {
+        try{
+            Workbook records = new XSSFWorkbook(is);
+            Sheet worksheet = records.getSheetAt(0);
+            //Iterate through each rows one by one
+            Iterator<Row> rowIterator = worksheet.iterator();
+            List<TransfastDataModel> transfastDataModelList = new ArrayList<>();
+            boolean flag= false;
+            int rowStart = 5;// Math.min(15, worksheet.getFirstRowNum());
+            int rowEnd = Math.max(1400, worksheet.getLastRowNum());
+            System.out.println("Row Start........."+rowStart+ "&& Row end......"+rowEnd);
+            DataFormatter df = new DataFormatter();
+            for (int rowNum = rowStart; rowNum < rowEnd; rowNum++) {
+                Row r = worksheet.getRow(rowNum);
+                if (r == null) {
+                    // This whole row is empty
+                    // Handle it as needed
+                    continue;
+                }
+                int lastColumn = Math.max(r.getLastCellNum(), 22);
+                System.out.println("Last Collum........."+lastColumn);
+                    for (int cn = 0; cn < lastColumn; cn++) {
+                        Cell c = r.getCell(cn, MissingCellPolicy.RETURN_BLANK_AS_NULL);
+                        if (c == null) {
+                            // The spreadsheet is empty in this cell
+                            System.out.println("empty cell");
+                        } else {
+                            df.formatCellValue(c);
+                            // Do something useful with the cell's contents
+                            System.out.println(c.getStringCellValue());
+
+                        }
+                    }
+            }
+
+
+/*
+            rowIterator.next();
+            boolean flag= false;
+            while (rowIterator.hasNext()){
+                if(flag==false){
+                    for(int i=0; i<4; i++){
+                        // Ignoring first 5 rows. Data is started from 6th row. So we need to skip first 5th row
+                        row = rowIterator.next();
+                    }
+                    flag=true;
+                }
+
+                TransfastDataModel transfastDataModel = new TransfastDataModel();
+                row = rowIterator.next();
+                //For each row, iterate through all the columns
+                Iterator<Cell> cellIterator = row.cellIterator();
+                List<String> eachCell = new ArrayList<>();
+                while (cellIterator.hasNext()){
+                    Cell cell = cellIterator.next();
+                    DataFormatter df = new DataFormatter();
+                    eachCell.add(df.formatCellValue(cell));
+                }
+                if(!eachCell.isEmpty() && eachCell.size()==22) {
+                    transfastDataModel.setInvoiceNo(eachCell.get(0));
+                    transfastDataModel.setTfPin(eachCell.get(1));
+                    transfastDataModel.setReferenceNo(eachCell.get(2));
+                    transfastDataModel.setInvoiceDate(eachCell.get(3));
+                    transfastDataModel.setPaidDate(eachCell.get(4));
+                    transfastDataModel.setStatus(eachCell.get(5));
+                    transfastDataModel.setRemitter(eachCell.get(6));
+                    transfastDataModel.setBeneficiary(eachCell.get(7));
+                    transfastDataModel.setBeneficiaryAccount(eachCell.get(9));
+                    transfastDataModel.setBranchName(eachCell.get(10));
+                    transfastDataModel.setBranchCode(eachCell.get(11));
+                    transfastDataModel.setPayingBranchRoutingNo(eachCell.get(12));
+                    transfastDataModel.setPayingBankBranchName(eachCell.get(13));
+                    transfastDataModel.setBankName(eachCell.get(14));
+                    transfastDataModel.setBeneficiaryState(eachCell.get(15));
+                    transfastDataModel.setBeneficiaryCityName(eachCell.get(16));
+                    transfastDataModel.setCashierName(eachCell.get(17));
+                    transfastDataModel.setAmountDoller(Double.parseDouble(eachCell.get(18).replaceAll(",", "")));
+                    transfastDataModel.setAmountLocal(Double.parseDouble(eachCell.get(19).replaceAll(",", "")));
+                    transfastDataModel.setBeneficiaryPhone(eachCell.get(20));
+                    transfastDataModel.setRemitterCountry(eachCell.get(21));
+
+                    transfastDataModelList.add(transfastDataModel);
+                    eachCell.clear();
+                }
+            }
+            if(transfastDataModelList.isEmpty()){
+                throw new IOException();
+            }
+
+ */
+            return transfastDataModelList;
+
+
+        } catch (IOException e) {
+            throw new RuntimeException("fail to parse CSV file: " + e.getMessage());
+        }
+    }
+
+    public static List<TransfastDataModel> csvToTransfastDataModels_1(InputStream is) {
         try{
             Workbook records = new XSSFWorkbook(is);
             Sheet worksheet = records.getSheetAt(0);
