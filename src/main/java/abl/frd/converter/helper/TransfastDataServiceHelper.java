@@ -33,6 +33,7 @@ public class TransfastDataServiceHelper {
             List<TransfastDataModel> transfastDataModelList = new ArrayList<>();
             int rowStart = 6;// Math.min(15, worksheet.getFirstRowNum());
             int rowEnd = worksheet.getLastRowNum(); //Math.max(1400, worksheet.getLastRowNum());
+            //System.out.println("Row start :"+rowStart+ "Row end :"+rowEnd);
             for (int rowNum = rowStart; rowNum <= rowEnd; rowNum++) {
                 TransfastDataModel transfastDataModel = new TransfastDataModel();
                 List<String> eachCell = new ArrayList<>();
@@ -55,7 +56,7 @@ public class TransfastDataServiceHelper {
                             eachCell.add(value);
                         }
                     }
-                System.out.println(eachCell.toString());
+              //  System.out.println(eachCell.toString());
                 transfastDataModel.setInvoiceNo(eachCell.get(0));
                 transfastDataModel.setTfPin(eachCell.get(1));
                 transfastDataModel.setReferenceNo(eachCell.get(2));
