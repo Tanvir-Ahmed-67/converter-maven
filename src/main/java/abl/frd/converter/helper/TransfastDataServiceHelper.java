@@ -157,8 +157,7 @@ public class TransfastDataServiceHelper {
     }
 
     public static ByteArrayInputStream transfastModelToCSV(List<TransfastDataModel> transfastDataModelList) {
-
-           final CSVFormat format = CSVFormat.DEFAULT.withQuoteMode(QuoteMode.NON_NUMERIC);
+           final CSVFormat format = CSVFormat.DEFAULT.withDelimiter('|').withRecordSeparator("\r\n").withIgnoreEmptyLines(true);
            try (ByteArrayOutputStream out = new ByteArrayOutputStream();
                 CSVPrinter csvPrinter = new CSVPrinter(new PrintWriter(out), format);) {
                    for (TransfastDataModel transfastDataModel : transfastDataModelList) {
