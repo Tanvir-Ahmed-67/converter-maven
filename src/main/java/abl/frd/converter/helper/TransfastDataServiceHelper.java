@@ -164,8 +164,8 @@ public class TransfastDataServiceHelper {
                                "BDT",  // Currency
                                transfastDataModel.getAmountLocal(),
                                transfastDataModel.getPaidDate(),
-                               transfastDataModel.getBeneficiary().trim(),
                                transfastDataModel.getRemitter().trim(),
+                               transfastDataModel.getBeneficiary().trim(),
                                transfastDataModel.getBeneficiaryAccount().trim(),
                                transfastDataModel.getBankName().trim(),
                                "11",   // Bank Code
