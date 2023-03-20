@@ -2,13 +2,11 @@ package abl.frd.converter.helper;
 import abl.frd.converter.model.TransfastDataModel;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
-import org.apache.commons.csv.QuoteMode;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import org.apache.poi.ss.usermodel.Row.MissingCellPolicy;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,7 +31,6 @@ public class TransfastDataServiceHelper {
             List<TransfastDataModel> transfastDataModelList = new ArrayList<>();
             int rowStart = 6;// Math.min(15, worksheet.getFirstRowNum());
             int rowEnd = worksheet.getLastRowNum(); //Math.max(1400, worksheet.getLastRowNum());
-            //System.out.println("Row start :"+rowStart+ "Row end :"+rowEnd);
             for (int rowNum = rowStart; rowNum <= rowEnd; rowNum++) {
                 TransfastDataModel transfastDataModel = new TransfastDataModel();
                 List<String> eachCell = new ArrayList<>();
