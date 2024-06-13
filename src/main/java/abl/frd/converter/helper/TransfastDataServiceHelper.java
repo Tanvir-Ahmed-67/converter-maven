@@ -1,14 +1,15 @@
 package abl.frd.converter.helper;
-
 import abl.frd.converter.model.TransfastDataModel;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.io.InputStream;
+import org.apache.poi.ss.usermodel.Row.MissingCellPolicy;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -25,23 +26,89 @@ public class TransfastDataServiceHelper {
     }
     public static List<TransfastDataModel> csvToTransfastDataModels(InputStream is) {
         try{
-            Workbook records = new HSSFWorkbook(is);
+            Workbook records = new XSSFWorkbook(is);
+            Sheet worksheet = records.getSheetAt(0);
+            List<TransfastDataModel> transfastDataModelList = new ArrayList<>();
+            int rowStart = 6;// Math.min(15, worksheet.getFirstRowNum());
+            int rowEnd = worksheet.getLastRowNum(); //Math.max(1400, worksheet.getLastRowNum());
+            for (int rowNum = rowStart; rowNum <= rowEnd; rowNum++) {
+                TransfastDataModel transfastDataModel = new TransfastDataModel();
+                List<String> eachCell = new ArrayList<>();
+                Row r = worksheet.getRow(rowNum);
+                if (r == null) {
+                    // This whole row is empty
+                    continue;
+                }
+                int lastColumn = Math.max(r.getLastCellNum(), 22);
+                    for (int cn = 0; cn < lastColumn; cn++) {
+                        Cell c = r.getCell(cn, MissingCellPolicy.RETURN_BLANK_AS_NULL);
+                        DataFormatter df = new DataFormatter();
+                        df.formatCellValue(c);
+                        if (c == null) {
+                            // The spreadsheet is empty in this cell
+                            eachCell.add("");  // setting dummy value as cell is empty here
+                        } else {
+                            // cell has contents here
+                            String value = df.formatCellValue(c);
+                            eachCell.add(value);
+                        }
+                    }
+              //  System.out.println(eachCell.toString());
+                transfastDataModel.setInvoiceNo(eachCell.get(0));
+                transfastDataModel.setTfPin(eachCell.get(1));
+                transfastDataModel.setReferenceNo(eachCell.get(2));
+                transfastDataModel.setInvoiceDate(eachCell.get(3));
+                transfastDataModel.setPaidDate(eachCell.get(4));
+                transfastDataModel.setStatus(eachCell.get(5));
+                transfastDataModel.setRemitter(eachCell.get(6));
+                transfastDataModel.setBeneficiary(eachCell.get(7));
+                transfastDataModel.setBeneficiaryAccount(eachCell.get(9));
+                transfastDataModel.setBranchName(eachCell.get(10));
+                transfastDataModel.setBranchCode(eachCell.get(11));
+                transfastDataModel.setPayingBranchRoutingNo(eachCell.get(12));
+                transfastDataModel.setPayingBankBranchName(eachCell.get(13));
+                transfastDataModel.setBankName(eachCell.get(14));
+                transfastDataModel.setBeneficiaryState(eachCell.get(15));
+                transfastDataModel.setBeneficiaryCityName(eachCell.get(16));
+                transfastDataModel.setCashierName(eachCell.get(17));
+                transfastDataModel.setAmountDoller(Double.parseDouble(eachCell.get(18).replaceAll(",", "")));
+                transfastDataModel.setAmountLocal(Double.parseDouble(eachCell.get(19).replaceAll(",", "")));
+                transfastDataModel.setBeneficiaryPhone(eachCell.get(20));
+                transfastDataModel.setRemitterCountry(eachCell.get(21));
+
+                transfastDataModelList.add(transfastDataModel);
+                eachCell.clear();
+            }
+            if(transfastDataModelList.isEmpty()){
+                throw new IOException();
+            }
+            return transfastDataModelList;
+        } catch (IOException e) {
+            throw new RuntimeException("fail to parse CSV file: " + e.getMessage());
+        }
+    }
+
+    public static List<TransfastDataModel> csvToTransfastDataModels_1(InputStream is) {
+        try{
+            Workbook records = new XSSFWorkbook(is);
             Sheet worksheet = records.getSheetAt(0);
             //Iterate through each rows one by one
             Iterator<Row> rowIterator = worksheet.iterator();
             List<TransfastDataModel> transfastDataModelList = new ArrayList<>();
             Row row = null;
             rowIterator.next();
-            int count=0;
-            System.out.println("test.........1.......");
+            boolean flag= false;
             while (rowIterator.hasNext()){
-                if(count==0){
-                    row = rowIterator.next();
-                    count++;
+                if(flag==false){
+                    for(int i=0; i<4; i++){
+                        // Ignoring first 5 rows. Data is started from 6th row. So we need to skip first 5th row
+                        row = rowIterator.next();
+                    }
+                    flag=true;
                 }
+
                 TransfastDataModel transfastDataModel = new TransfastDataModel();
                 row = rowIterator.next();
-
                 //For each row, iterate through all the columns
                 Iterator<Cell> cellIterator = row.cellIterator();
                 List<String> eachCell = new ArrayList<>();
@@ -50,30 +117,73 @@ public class TransfastDataServiceHelper {
                     DataFormatter df = new DataFormatter();
                     eachCell.add(df.formatCellValue(cell));
                 }
-                if(!eachCell.isEmpty()) {
-                    transfastDataModel.setReferenceNo(eachCell.get(0));
-                    System.out.println("test........2........");
-                    /*
-                    transfastDataModel.setCustomerNo(eachCell.get(1));
-                    transfastDataModel.setRemitterName(eachCell.get(2));
-                    transfastDataModel.setRemitterAccount(eachCell.get(3));
-                    transfastDataModel.setRemitterAccountType(eachCell.get(4));
-                    transfastDataModel.setBeneficiaryName(eachCell.get(5));
-                    transfastDataModel.setBeneficiaryAccount(eachCell.get(6).replaceAll("\\.", ""));
-                    transfastDataModel.setBeneficiaryAccountType(eachCell.get(7));
-                    transfastDataModel.setRoutingNumber(eachCell.get(8));
-*/
-                    transfastDataModel.setCurrency(eachCell.get(9));
-                    transfastDataModel.setAmount(Double.parseDouble(eachCell.get(10).replaceAll(",", "")));
+                if(!eachCell.isEmpty() && eachCell.size()==22) {
+                    transfastDataModel.setInvoiceNo(eachCell.get(0));
+                    transfastDataModel.setTfPin(eachCell.get(1));
+                    transfastDataModel.setReferenceNo(eachCell.get(2));
+                    transfastDataModel.setInvoiceDate(eachCell.get(3));
+                    transfastDataModel.setPaidDate(eachCell.get(4));
+                    transfastDataModel.setStatus(eachCell.get(5));
+                    transfastDataModel.setRemitter(eachCell.get(6));
+                    transfastDataModel.setBeneficiary(eachCell.get(7));
+                    transfastDataModel.setBeneficiaryAccount(eachCell.get(9));
+                    transfastDataModel.setBranchName(eachCell.get(10));
+                    transfastDataModel.setBranchCode(eachCell.get(11));
+                    transfastDataModel.setPayingBranchRoutingNo(eachCell.get(12));
+                    transfastDataModel.setPayingBankBranchName(eachCell.get(13));
+                    transfastDataModel.setBankName(eachCell.get(14));
+                    transfastDataModel.setBeneficiaryState(eachCell.get(15));
+                    transfastDataModel.setBeneficiaryCityName(eachCell.get(16));
+                    transfastDataModel.setCashierName(eachCell.get(17));
+                    transfastDataModel.setAmountDoller(Double.parseDouble(eachCell.get(18).replaceAll(",", "")));
+                    transfastDataModel.setAmountLocal(Double.parseDouble(eachCell.get(19).replaceAll(",", "")));
+                    transfastDataModel.setBeneficiaryPhone(eachCell.get(20));
+                    transfastDataModel.setRemitterCountry(eachCell.get(21));
+
                     transfastDataModelList.add(transfastDataModel);
                     eachCell.clear();
-                    count++;
                 }
             }
-            System.out.println("test.......3.........");
+            if(transfastDataModelList.isEmpty()){
+                throw new IOException();
+            }
             return transfastDataModelList;
         } catch (IOException e) {
             throw new RuntimeException("fail to parse CSV file: " + e.getMessage());
         }
+    }
+
+    public static ByteArrayInputStream transfastModelToCSV(List<TransfastDataModel> transfastDataModelList) {
+           final CSVFormat format = CSVFormat.DEFAULT.withDelimiter('|').withRecordSeparator("\r\n").withIgnoreEmptyLines(true);
+           try (ByteArrayOutputStream out = new ByteArrayOutputStream();
+                CSVPrinter csvPrinter = new CSVPrinter(new PrintWriter(out), format);) {
+                   for (TransfastDataModel transfastDataModel : transfastDataModelList) {
+                       List<Object> data = Arrays.asList(
+                               "7040",
+                               transfastDataModel.getTfPin().trim(),
+                               "BDT",  // Currency
+                               transfastDataModel.getAmountLocal(),
+                               transfastDataModel.getPaidDate(),
+                               transfastDataModel.getRemitter().trim(),
+                               transfastDataModel.getBeneficiary().trim(),
+                               transfastDataModel.getBeneficiaryAccount().trim(),
+                               transfastDataModel.getBankName().trim(),
+                               "11",   // Bank Code
+                               transfastDataModel.getBranchName().trim(),
+                               transfastDataModel.getPayingBranchRoutingNo().trim(),
+                               null,
+                               null,
+                               null,
+                               null,
+                               null,
+                               "0"
+                       );
+                       csvPrinter.printRecord(data);
+                   }
+               csvPrinter.flush();
+               return new ByteArrayInputStream(out.toByteArray());
+           } catch (IOException e) {
+               throw new RuntimeException("fail to import data to CSV file: " + e.getMessage());
+           }
     }
 }

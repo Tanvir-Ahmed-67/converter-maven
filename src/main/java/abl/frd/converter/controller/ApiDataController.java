@@ -45,19 +45,25 @@ public class ApiDataController {
         if (ApiDataServiceHelper.hasCSVFormat(file)) {
             int extensionIndex = file.getOriginalFilename().lastIndexOf(".");
             String fileNameWithoutExtension = file.getOriginalFilename().substring(0,extensionIndex);
-            try {
-                fileService.save(file);
-                message = "Uploaded the file successfully: " + file.getOriginalFilename();
-                String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                        .path("/api/download/")
-                        .path(fileNameWithoutExtension+".txt")
-                        .toUriString();
+            if(fileNameWithoutExtension.toLowerCase().contains("t24")){
+                try {
+                    fileService.save(file);
+                    message = "Uploaded the file successfully: " + file.getOriginalFilename();
+                    String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                            .path("/api/download/")
+                            .path(fileNameWithoutExtension+".txt")
+                            .toUriString();
 
-                return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message,fileDownloadUri));
-            } catch (Exception e) {
-                e.printStackTrace();
-                message = "Could not upload the file: " + file.getOriginalFilename() + "!";
-                return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message,""));
+                    return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message,fileDownloadUri));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    message = "Could not upload the file: " + file.getOriginalFilename() + "!";
+                    return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message,""));
+                }
+            }
+            else{
+                message = "Please upload Correct file!";
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage(message,""));
             }
         }
 

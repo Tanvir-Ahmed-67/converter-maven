@@ -3,6 +3,8 @@ package abl.frd.converter.controller;
 import abl.frd.converter.ResponseMessage;
 import abl.frd.converter.helper.EzRemitDataServiceHelper;
 import abl.frd.converter.service.EzRemitDataService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -21,6 +23,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 public class EzModelDataController {
     @Autowired
     private final EzRemitDataService ezRemitDataService;
+    public Logger logger = LoggerFactory.getLogger(EzModelDataController.class);
+
     public EzModelDataController(EzRemitDataService ezRemitDataService){
         this.ezRemitDataService = ezRemitDataService;
     }
@@ -33,6 +37,7 @@ public class EzModelDataController {
 
     @GetMapping(value = "/cleardb")
     public ResponseEntity<ResponseMessage> clearDb() {
+        logger.info("Database Cleared!");
         String message = "Database Cleared!";
         ezRemitDataService.clearDatabase();
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
@@ -45,20 +50,23 @@ public class EzModelDataController {
             int extensionIndex = file.getOriginalFilename().lastIndexOf(".");
             String fileNameWithoutExtension = file.getOriginalFilename().substring(0, extensionIndex);
             try {
+                logger.info("Attempting to save File data into database");
                 ezRemitDataService.save(file);
+                logger.info("Successfully Saved File data into database");
                 message = "Uploaded the file successfully: " + file.getOriginalFilename();
                 String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                         .path("/ezremit/download/")
                         .path(fileNameWithoutExtension + ".txt")
                         .toUriString();
-
                 return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message, fileDownloadUri));
             } catch (Exception e) {
+                logger.error(e.toString());
                 e.printStackTrace();
                 message = "Could not upload the file: " + file.getOriginalFilename() + "!";
                 return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message, ""));
             }
         }
+        logger.info("Wrong File Format. hasCSVFormat(file) method checking failed");
         message = "Please upload a csv file!";
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage(message,""));
     }

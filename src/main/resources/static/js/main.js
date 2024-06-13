@@ -34,7 +34,6 @@ function clearDataTable(){
     var xhr1 = new XMLHttpRequest();
     xhr1.open("GET", "/api/cleardb");
     xhr1.onload = function() {
-        console.log(xhr1.responseText);
         if(xhr1.status == 200) {
             singleFileUploadError.style.display = "none";
             singleFileUploadSuccess.innerHTML = "<p>Database Cleared!</p>";

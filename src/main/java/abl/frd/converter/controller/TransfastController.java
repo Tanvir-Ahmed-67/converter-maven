@@ -1,11 +1,14 @@
 package abl.frd.converter.controller;
 
 import abl.frd.converter.ResponseMessage;
-import abl.frd.converter.helper.InfinityBeftnDataServiceHelper;
 import abl.frd.converter.helper.TransfastDataServiceHelper;
 import abl.frd.converter.service.TransfastDataService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -35,13 +38,10 @@ public class TransfastController {
     @PostMapping("/upload")
     public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
         String message = "";
-        System.out.println("inside controller");
         if (TransfastDataServiceHelper.hasCSVFormat(file)) {
-            System.out.println("inside controller 1");
             int extensionIndex = file.getOriginalFilename().lastIndexOf(".");
             String fileNameWithoutExtension = file.getOriginalFilename().substring(0, extensionIndex);
             try {
-                System.out.println("inside controller 2");
                 transfastDataService.save(file);
                 message = "Uploaded the file successfully: " + file.getOriginalFilename();
                 String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -57,6 +57,16 @@ public class TransfastController {
         }
         message = "Please upload a csv file!";
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage(message,""));
+    }
+    @GetMapping("/download/{fileName:.+}")
+    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName) {
+        InputStreamResource file = new InputStreamResource(transfastDataService.load());
+        int extensionIndex = fileName.lastIndexOf(".");
+        String fileNameWithoutExtension = fileName.substring(0,extensionIndex);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+fileNameWithoutExtension+".txt")
+                .contentType(MediaType.parseMediaType("application/csv"))
+                .body(file);
     }
 
 }

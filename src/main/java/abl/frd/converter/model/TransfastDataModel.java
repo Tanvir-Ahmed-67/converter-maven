@@ -8,65 +8,27 @@ import javax.persistence.*;
 @Table(name = "transfast_data_table")
 public class TransfastDataModel {
 
-/*
-    TfPin
-    Reference
-    Invoice
-    ReceiveAmount
-    ReceiveCurrency
-    TransactionDate
-    SenderFullName
-    SenderID
-    SenderCountryName
-    SenderCityName
-    SenderAddress
-    PaymentModeName
-    ReceiverFullName
-    Receiver Address
-    ReceiverCityName
-    ReceiverCountryName
-    ReceiverPhoneMobile
-    BranchId
-    BranchName
-    BankName
-    AccountNumber
- */
     @Id
     @Column(name = "row_id")
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;
-    @Column(name = "tfPin")       // excode
+    @Column(name = "tfPin")
     private String tfPin;
-    @Column(name = "referenceNo")  // tranno
+    @Column(name = "referenceNo")
     private String referenceNo;
     @Column(name = "invoiceNo")
     private String invoiceNo;
-    @Column(name = "amount")
-    private double amount;
-    @Column(name = "currency")
-    private String currency;
-    @Column(name = "enteredDate")
-    private String enteredDate;
+    @Column(name = "invoiceDate")
+    private String invoiceDate;
+    @Column(name = "paidDate")
+    private String paidDate;
+    @Column(name = "status")
+    private String status;
+
     @Column(name = "remitter")
     private String remitter;
-    @Column(name = "remitterId")
-    private String remitterId;
-    @Column(name = "remitterCountryName")
-    private String remitterCountryName;
-    @Column(name = "remitterCityName")
-    private String remitterCityName;
-    @Column(name = "remitterAdress")
-    private String remitterAdress;
     @Column(name = "beneficiary")
     private String beneficiary;
-    @Column(name = "beneficiaryCountryName")
-    private String beneficiaryCountryName;
-    @Column(name = "beneficiaryCityName")
-    private String beneficiaryCityName;
-    @Column(name = "beneficiaryAdress")
-    private String beneficiaryAdress;
-    @Column(name = "beneficiaryPhone")
-    private String beneficiaryPhone;
     @Column(name = "beneficiaryAccount")
     private String beneficiaryAccount;
     @Column(name = "bankName")
@@ -75,58 +37,39 @@ public class TransfastDataModel {
     private String branchName;
     @Column(name = "branchCode")
     private String branchCode;
+    @Column(name = "payingBranchRoutingNo")
+    private String payingBranchRoutingNo;
+    @Column(name = "payingBankBranchName")
+    private String payingBankBranchName;
+    @Column(name = "beneficiaryState")
+    private String beneficiaryState;
+    @Column(name = "beneficiaryCityName")
+    private String beneficiaryCityName;
+    @Column(name = "cashierName")
+    private String cashierName;
+    @Column(name = "amountDoller")
+    private Double amountDoller;
+    @Column(name = "amountLocal")
+    private Double amountLocal;
+    @Column(name = "beneficiaryPhone")
+    private String beneficiaryPhone;
+    @Column(name = "remitterCountry")
+    private String remitterCountry;
 
-    public TransfastDataModel(String tfPin, String referenceNo, String invoiceNo, double amount, String currency, String enteredDate, String remitter, String remitterId, String remitterCountryName, String remitterCityName, String remitterAdress, String beneficiary, String beneficiaryCountryName, String beneficiaryCityName, String beneficiaryAdress, String beneficiaryPhone, String beneficiaryAccount, String bankName, String branchName, String branchCode) {
-        this.tfPin = tfPin;
-        this.referenceNo = referenceNo;
-        this.invoiceNo = invoiceNo;
-        this.amount = amount;
-        this.currency = currency;
-        this.enteredDate = enteredDate;
-        this.remitter = remitter;
-        this.remitterId = remitterId;
-        this.remitterCountryName = remitterCountryName;
-        this.remitterCityName = remitterCityName;
-        this.remitterAdress = remitterAdress;
-        this.beneficiary = beneficiary;
-        this.beneficiaryCountryName = beneficiaryCountryName;
-        this.beneficiaryCityName = beneficiaryCityName;
-        this.beneficiaryAdress = beneficiaryAdress;
-        this.beneficiaryPhone = beneficiaryPhone;
-        this.beneficiaryAccount = beneficiaryAccount;
-        this.bankName = bankName;
-        this.branchName = branchName;
-        this.branchCode = branchCode;
-    }
     public TransfastDataModel(){
 
     }
 
-    @Override
-    public String toString() {
-        return "TransfastDataModel{" +
-                "id=" + id +
-                ", tfPin='" + tfPin + '\'' +
-                ", referenceNo='" + referenceNo + '\'' +
-                ", invoiceNo='" + invoiceNo + '\'' +
-                ", amount=" + amount +
-                ", currency='" + currency + '\'' +
-                ", enteredDate='" + enteredDate + '\'' +
-                ", remitter='" + remitter + '\'' +
-                ", remitterId='" + remitterId + '\'' +
-                ", remitterCountryName='" + remitterCountryName + '\'' +
-                ", remitterCityName='" + remitterCityName + '\'' +
-                ", remitterAdress='" + remitterAdress + '\'' +
-                ", beneficiary='" + beneficiary + '\'' +
-                ", beneficiaryCountryName='" + beneficiaryCountryName + '\'' +
-                ", beneficiaryCityName='" + beneficiaryCityName + '\'' +
-                ", beneficiaryAdress='" + beneficiaryAdress + '\'' +
-                ", beneficiaryPhone='" + beneficiaryPhone + '\'' +
-                ", beneficiaryAccount='" + beneficiaryAccount + '\'' +
-                ", bankName='" + bankName + '\'' +
-                ", branchName='" + branchName + '\'' +
-                ", branchCode='" + branchCode + '\'' +
-                '}';
+
+
+
+
+    public String getPayingBankBranchName() {
+        return payingBankBranchName;
+    }
+
+    public void setPayingBankBranchName(String payingBankBranchName) {
+        this.payingBankBranchName = payingBankBranchName;
     }
 
     public int getId() {
@@ -161,28 +104,28 @@ public class TransfastDataModel {
         this.invoiceNo = invoiceNo;
     }
 
-    public double getAmount() {
-        return amount;
+    public String getInvoiceDate() {
+        return invoiceDate;
     }
 
-    public void setAmount(double amount) {
-        this.amount = amount;
+    public void setInvoiceDate(String invoiceDate) {
+        this.invoiceDate = invoiceDate;
     }
 
-    public String getCurrency() {
-        return currency;
+    public String getPaidDate() {
+        return paidDate;
     }
 
-    public void setCurrency(String currency) {
-        this.currency = currency;
+    public void setPaidDate(String paidDate) {
+        this.paidDate = paidDate;
     }
 
-    public String getEnteredDate() {
-        return enteredDate;
+    public String getStatus() {
+        return status;
     }
 
-    public void setEnteredDate(String enteredDate) {
-        this.enteredDate = enteredDate;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getRemitter() {
@@ -193,76 +136,12 @@ public class TransfastDataModel {
         this.remitter = remitter;
     }
 
-    public String getRemitterId() {
-        return remitterId;
-    }
-
-    public void setRemitterId(String remitterId) {
-        this.remitterId = remitterId;
-    }
-
-    public String getRemitterCountryName() {
-        return remitterCountryName;
-    }
-
-    public void setRemitterCountryName(String remitterCountryName) {
-        this.remitterCountryName = remitterCountryName;
-    }
-
-    public String getRemitterCityName() {
-        return remitterCityName;
-    }
-
-    public void setRemitterCityName(String remitterCityName) {
-        this.remitterCityName = remitterCityName;
-    }
-
-    public String getRemitterAdress() {
-        return remitterAdress;
-    }
-
-    public void setRemitterAdress(String remitterAdress) {
-        this.remitterAdress = remitterAdress;
-    }
-
     public String getBeneficiary() {
         return beneficiary;
     }
 
     public void setBeneficiary(String beneficiary) {
         this.beneficiary = beneficiary;
-    }
-
-    public String getBeneficiaryCountryName() {
-        return beneficiaryCountryName;
-    }
-
-    public void setBeneficiaryCountryName(String beneficiaryCountryName) {
-        this.beneficiaryCountryName = beneficiaryCountryName;
-    }
-
-    public String getBeneficiaryCityName() {
-        return beneficiaryCityName;
-    }
-
-    public void setBeneficiaryCityName(String beneficiaryCityName) {
-        this.beneficiaryCityName = beneficiaryCityName;
-    }
-
-    public String getBeneficiaryAdress() {
-        return beneficiaryAdress;
-    }
-
-    public void setBeneficiaryAdress(String beneficiaryAdress) {
-        this.beneficiaryAdress = beneficiaryAdress;
-    }
-
-    public String getBeneficiaryPhone() {
-        return beneficiaryPhone;
-    }
-
-    public void setBeneficiaryPhone(String beneficiaryPhone) {
-        this.beneficiaryPhone = beneficiaryPhone;
     }
 
     public String getBeneficiaryAccount() {
@@ -295,5 +174,120 @@ public class TransfastDataModel {
 
     public void setBranchCode(String branchCode) {
         this.branchCode = branchCode;
+    }
+
+    public String getPayingBranchRoutingNo() {
+        return payingBranchRoutingNo;
+    }
+
+    public void setPayingBranchRoutingNo(String payingBranchRoutingNo) {
+        this.payingBranchRoutingNo = payingBranchRoutingNo;
+    }
+
+    public String getBeneficiaryState() {
+        return beneficiaryState;
+    }
+
+    public void setBeneficiaryState(String beneficiaryState) {
+        this.beneficiaryState = beneficiaryState;
+    }
+
+    public String getBeneficiaryCityName() {
+        return beneficiaryCityName;
+    }
+
+    public void setBeneficiaryCityName(String beneficiaryCityName) {
+        this.beneficiaryCityName = beneficiaryCityName;
+    }
+
+    public String getCashierName() {
+        return cashierName;
+    }
+
+    public void setCashierName(String cashierName) {
+        this.cashierName = cashierName;
+    }
+    public String getBeneficiaryPhone() {
+        return beneficiaryPhone;
+    }
+
+    public void setBeneficiaryPhone(String beneficiaryPhone) {
+        this.beneficiaryPhone = beneficiaryPhone;
+    }
+
+    public String getRemitterCountry() {
+        return remitterCountry;
+    }
+
+    public void setRemitterCountry(String remitterCountry) {
+        this.remitterCountry = remitterCountry;
+    }
+
+    public Double getAmountDoller() {
+        return amountDoller;
+    }
+
+    public void setAmountDoller(Double amountDoller) {
+        this.amountDoller = amountDoller;
+    }
+
+    public Double getAmountLocal() {
+        return amountLocal;
+    }
+
+    public void setAmountLocal(Double amountLocal) {
+        this.amountLocal = amountLocal;
+    }
+
+    @Override
+    public String toString() {
+        return "TransfastDataModel{" +
+                "id=" + id +
+                ", tfPin='" + tfPin + '\'' +
+                ", referenceNo='" + referenceNo + '\'' +
+                ", invoiceNo='" + invoiceNo + '\'' +
+                ", invoiceDate='" + invoiceDate + '\'' +
+                ", paidDate='" + paidDate + '\'' +
+                ", status='" + status + '\'' +
+                ", remitter='" + remitter + '\'' +
+                ", beneficiary='" + beneficiary + '\'' +
+                ", beneficiaryAccount='" + beneficiaryAccount + '\'' +
+                ", bankName='" + bankName + '\'' +
+                ", branchName='" + branchName + '\'' +
+                ", branchCode='" + branchCode + '\'' +
+                ", payingBranchRoutingNo='" + payingBranchRoutingNo + '\'' +
+                ", payingBankBranchName='" + payingBankBranchName + '\'' +
+                ", beneficiaryState='" + beneficiaryState + '\'' +
+                ", beneficiaryCityName='" + beneficiaryCityName + '\'' +
+                ", cashierName='" + cashierName + '\'' +
+                ", amountDoller=" + amountDoller +
+                ", amountLocal=" + amountLocal +
+                ", beneficiaryPhone='" + beneficiaryPhone + '\'' +
+                ", remitterCountry='" + remitterCountry + '\'' +
+                '}';
+    }
+
+    public TransfastDataModel(String tfPin, String referenceNo, String invoiceNo, String invoiceDate, String paidDate, String status, String remitter, String beneficiary, String beneficiaryAccount, String bankName, String branchName, String branchCode, String payingBranchRoutingNo, String payingBankBranchName, String beneficiaryState, String beneficiaryCityName, String cashierName, Double amountDoller, Double amountLocal, String beneficiaryPhone, String remitterCountry) {
+        this.tfPin = tfPin;
+        this.referenceNo = referenceNo;
+        this.invoiceNo = invoiceNo;
+        this.invoiceDate = invoiceDate;
+        this.paidDate = paidDate;
+        this.status = status;
+        this.remitter = remitter;
+        this.beneficiary = beneficiary;
+        this.beneficiaryAccount = beneficiaryAccount;
+        this.bankName = bankName;
+        this.branchName = branchName;
+        this.branchCode = branchCode;
+        this.payingBranchRoutingNo = payingBranchRoutingNo;
+        this.payingBankBranchName = payingBankBranchName;
+        this.beneficiaryState = beneficiaryState;
+        this.beneficiaryCityName = beneficiaryCityName;
+        this.cashierName = cashierName;
+        this.amountDoller = amountDoller;
+        this.amountLocal = amountLocal;
+        this.beneficiaryPhone = beneficiaryPhone;
+        this.remitterCountry = remitterCountry;
     }
 }

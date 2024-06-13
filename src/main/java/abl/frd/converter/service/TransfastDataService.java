@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -32,6 +33,11 @@ public class TransfastDataService {
         } catch (IOException e) {
             throw new RuntimeException("fail to store csv data: " + e.getMessage());
         }
+    }
+    public ByteArrayInputStream load() {
+        List<TransfastDataModel> transfastDataModelList = transfastDataModelRepository.findAll();
+        ByteArrayInputStream in = TransfastDataServiceHelper.transfastModelToCSV(transfastDataModelList);
+        return in;
     }
 
 }
