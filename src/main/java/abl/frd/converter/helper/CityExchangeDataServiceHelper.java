@@ -31,14 +31,24 @@ public class CityExchangeDataServiceHelper {
     public static List<CityExchangeDataModel> csvToCityExchangeDataModels(InputStream is) {
         try{
             Workbook records = new XSSFWorkbook(is);
+            Row r;
+            StringBuilder rowData = new StringBuilder();
             Sheet worksheet = records.getSheetAt(0);
             List<CityExchangeDataModel> cityExchangeDataModelList = new ArrayList<>();
             int rowStart = 9;// Math.min(15, worksheet.getFirstRowNum());
             int rowEnd = worksheet.getLastRowNum(); //Math.max(1400, worksheet.getLastRowNum());
+            r=worksheet.getRow(3);
+            Cell cell = r.getCell(0,Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
+            String enteredDate="";
+            if (cell != null && cell.getCellType() == CellType.STRING){
+                rowData.append(cell.getStringCellValue());
+                rowData.append(" "); // Separator for cells, change if needed
+                enteredDate = rowData.toString().replace("DATE:", "").trim();
+            }
             for (int rowNum = rowStart; rowNum <= rowEnd; rowNum++) {
                 CityExchangeDataModel cityExchangeDataModel = new CityExchangeDataModel();
                 List<String> eachCell = new ArrayList<>();
-                Row r = worksheet.getRow(rowNum);
+                r = worksheet.getRow(rowNum);
                 if (r == null) {
                     // This whole row is empty
                     break;
@@ -64,6 +74,7 @@ public class CityExchangeDataServiceHelper {
                 cityExchangeDataModel.setBankName(eachCell.get(4));
                 cityExchangeDataModel.setBranchName(eachCell.get(5));
                 cityExchangeDataModel.setAmount(Double.parseDouble(eachCell.get(6)));
+                cityExchangeDataModel.setEnteredDate(enteredDate);
                 cityExchangeDataModel.setRemitterName(eachCell.get(7));
 
 
