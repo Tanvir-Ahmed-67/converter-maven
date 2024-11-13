@@ -29,27 +29,23 @@ public class ShahGlobalDataServiceHelper {
                         contentType.equalsIgnoreCase("application/vnd.oasis.opendocument.spreadsheet")||
                         contentType.equalsIgnoreCase("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
     }
+    public static Workbook getWorkbook(InputStream is) throws IOException {
+        try {
+            // WorkbookFactory automatically detects whether it's .xls or .xlsx
+            return WorkbookFactory.create(is);
+        } catch (Exception e) {
+            throw new IOException("Failed to open the Excel file. Please ensure it's in .xls or .xlsx format.", e);
+        }
+    }
 
     public static List<ShahGlobalDataModel> csvToShahGlobalDataModels(InputStream is) {
         try{
-            Workbook records = new XSSFWorkbook(is);
+            Workbook records = getWorkbook(is);
             Row r;
-            StringBuilder rowData = new StringBuilder();
             Sheet worksheet = records.getSheetAt(0);
             List<ShahGlobalDataModel> shahGlobalDataModelList = new ArrayList<>();
             int rowStart = 1;// Math.min(15, worksheet.getFirstRowNum());
             int rowEnd = worksheet.getLastRowNum(); //Math.max(1400, worksheet.getLastRowNum());
-
-            /*
-            r=worksheet.getRow(3);
-            Cell cell = r.getCell(0,Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
-            String enteredDate="";
-            if (cell != null && cell.getCellType() == CellType.STRING){
-                rowData.append(cell.getStringCellValue());
-                rowData.append(" "); // Separator for cells, change if needed
-                enteredDate = rowData.toString().replace("DATE:", "").trim();
-            }
-             */
             for (int rowNum = rowStart; rowNum <= rowEnd; rowNum++) {
                 ShahGlobalDataModel shahGlobalDataModel = new ShahGlobalDataModel();
                 List<String> eachCell = new ArrayList<>();
