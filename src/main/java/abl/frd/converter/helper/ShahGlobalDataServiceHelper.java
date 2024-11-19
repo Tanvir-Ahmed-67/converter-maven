@@ -50,7 +50,7 @@ public class ShahGlobalDataServiceHelper {
                 ShahGlobalDataModel shahGlobalDataModel = new ShahGlobalDataModel();
                 List<String> eachCell = new ArrayList<>();
                 r = worksheet.getRow(rowNum);
-                if (r == null) {
+                if (r == null || isRowEmpty(r)) {
                     // This whole row is empty
                     break;
                 }
@@ -74,7 +74,7 @@ public class ShahGlobalDataServiceHelper {
                 shahGlobalDataModel.setBeneficiaryAccount(eachCell.get(4));
                 shahGlobalDataModel.setBankName(eachCell.get(5));
                 shahGlobalDataModel.setBranchName(eachCell.get(7));
-                shahGlobalDataModel.setAmount(Double.parseDouble(eachCell.get(2)));
+                shahGlobalDataModel.setAmount(Double.parseDouble(eachCell.get(2).replace(",", "")));
                 shahGlobalDataModel.setEnteredDate(eachCell.get(1));
                 shahGlobalDataModel.setRemitterName(eachCell.get(9));
                 shahGlobalDataModel.setBranchCode(eachCell.get(8));
@@ -88,6 +88,21 @@ public class ShahGlobalDataServiceHelper {
         } catch (IOException e) {
             throw new RuntimeException("fail to parse CSV file: " + e.getMessage());
         }
+    }
+    // Helper method to check if a row is empty
+    private static boolean isRowEmpty(Row row) {
+        for (int cellNum = row.getFirstCellNum(); cellNum < row.getLastCellNum(); cellNum++) {
+            Cell cell = row.getCell(cellNum);
+            if (cell != null && cell.getCellType() != CellType.BLANK) {
+                // Check if cell contains meaningful data
+                if (cell.getCellType() == CellType.STRING && !cell.getStringCellValue().trim().isEmpty()) {
+                    return false;
+                } else if (cell.getCellType() == CellType.NUMERIC || cell.getCellType() == CellType.BOOLEAN) {
+                    return false;
+                }
+            }
+        }
+        return true; // All cells are empty
     }
     public static ByteArrayInputStream shahGlobalDataModelToCSV(List<ShahGlobalDataModel> shahGlobalDataModelList) {
         final CSVFormat format = CSVFormat.DEFAULT.withDelimiter('|').withRecordSeparator("\r\n").withIgnoreEmptyLines(true);
