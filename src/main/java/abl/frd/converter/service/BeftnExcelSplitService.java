@@ -13,14 +13,14 @@ import java.util.*;
 
 @Service
 public class BeftnExcelSplitService {
-    public Map<String, List<String>> splitExcelFile(InputStream inputStream, String outputDirectory, int maxRowsPerFile, String fileName) throws IOException {
+    public Map<String, List<String>> splitExcelFile(InputStream inputStream, String outputDirectory, int maxRowsPerFile, String fileName, int fileStartingNumber) throws IOException {
         // Load the input Excel file
         Workbook inputWorkbook = WorkbookFactory.create(inputStream);
         Sheet inputSheet = inputWorkbook.getSheetAt(0); // Assuming working with the first sheet
         DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
 
         int rowCount = 0;
-        int fileCount = 1;
+        int fileCount = fileStartingNumber;
         double grossAmount=0;
         String formattedTotal = "";
         double totalAmountInEachFile=0;

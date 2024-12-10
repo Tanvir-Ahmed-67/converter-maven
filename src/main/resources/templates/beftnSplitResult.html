@@ -14,7 +14,7 @@
     <div class="upload-content">
       <h4 th:text="${message}"></h4>
         <div th:if="${individualSum}">
-            <strong>Individual Sum:</strong>
+            <strong><p>Individual Sum:</p></strong>
                 <span th:text="'('"></span>
                 <span th:each="item, iterStat : ${individualSum}">
             <span th:text="${item}"></span>
@@ -23,11 +23,11 @@
                 <span th:text="')'"></span>
         </div>
         <div th:if="${grossSum}">
-            <strong>Gross Sum: </strong>
+            <strong><p>Gross Sum: </p></strong>
             <span th:text="${grossSum[0]}"></span>
         </div>
         <div th:if="${totalCount}">
-            <strong>Total Number of Remittances:</strong>
+            <strong><p>Total Number of Remittances:</p></strong>
             <span th:text="${totalCount[0]}"></span>
         </div>
       <div th:if="${outputDir}">

@@ -2,6 +2,7 @@ package abl.frd.converter.controller;
 
 import abl.frd.converter.service.BeftnExcelSplitService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,12 +17,13 @@ import java.util.Map;
 @CrossOrigin("http://localhost:8080")
 @RequestMapping("/beftn")
 public class BeftnExcelSplitController {
+    @Value("${output.directory}")
+    private String outputDir;
     @Autowired
     private BeftnExcelSplitService beftnExcelSplitService;
 
     @GetMapping("/uploadFile")
-    public String showForm(Model model) {
-        String outputDir = System.getProperty("user.dir") + "/output";
+    public String showForm() {
         beftnExcelSplitService.clearOutputDirectory(outputDir);
         return "beftnSplitUpload";
     }
@@ -29,16 +31,19 @@ public class BeftnExcelSplitController {
     @PostMapping("/split")
     public String splitExcel(@RequestParam("file") MultipartFile file,
                              @RequestParam("maxRows") int maxRows,
+                             @RequestParam("initialFileNumber") int initialFileNumber,
                              Model model) {
-        String outputDir = System.getProperty("user.dir") + "\\output";
-        new File(outputDir).mkdirs();
+        File outputDirectory = new File(outputDir);
+        if (!outputDirectory.exists()) {
+            outputDirectory.mkdirs(); // Ensure directory exists
+        }
 
         try {
             int extensionIndex = file.getOriginalFilename().lastIndexOf(".");
             String fileNameWithoutExtension = file.getOriginalFilename().substring(0, extensionIndex);
             String inputFilePath = outputDir + "/" + file.getOriginalFilename();
 
-            Map<String, List<String>> returnMap = beftnExcelSplitService.splitExcelFile(file.getInputStream(), outputDir, maxRows, fileNameWithoutExtension);
+            Map<String, List<String>> returnMap = beftnExcelSplitService.splitExcelFile(file.getInputStream(), outputDir, maxRows, fileNameWithoutExtension, initialFileNumber);
             model.addAttribute("message", "BEFTN file splitted successfully!");
             model.addAttribute("individualSum", returnMap.get("individualSum"));
             model.addAttribute("grossSum", returnMap.get("grossSum"));
