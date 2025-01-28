@@ -50,17 +50,18 @@ public class InfinityBeftnDataServiceHelper {
                     eachCell.add(df.formatCellValue(cell));
                 }
                 if(!eachCell.isEmpty()) {
-                    infinityBeftnModel.setTranNo(eachCell.get(0));
-                    infinityBeftnModel.setCustomerNo(eachCell.get(1));
-                    infinityBeftnModel.setRemitterName(eachCell.get(2));
-                    infinityBeftnModel.setRemitterAccount(eachCell.get(3));
-                    infinityBeftnModel.setRemitterAccountType(eachCell.get(4));
-                    infinityBeftnModel.setBeneficiaryName(eachCell.get(5));
-                    infinityBeftnModel.setBeneficiaryAccount(eachCell.get(6).replaceAll("\\.", ""));
-                    infinityBeftnModel.setBeneficiaryAccountType(eachCell.get(7));
-                    infinityBeftnModel.setRoutingNumber(eachCell.get(8));
-                    infinityBeftnModel.setCurrency(eachCell.get(9));
-                    infinityBeftnModel.setAmount(Double.parseDouble(eachCell.get(10).replaceAll(",", "")));
+                    infinityBeftnModel.setOrgCompanyId(eachCell.get(1));
+                    infinityBeftnModel.setOrgCompanyName(eachCell.get(2));
+                    infinityBeftnModel.setOrgCustomerNo(eachCell.get(3));
+                    infinityBeftnModel.setOrgName(eachCell.get(4));
+                    infinityBeftnModel.setOrgAccountNo(eachCell.get(5));
+                    infinityBeftnModel.setOrgAccountType(eachCell.get(6));
+                    infinityBeftnModel.setBeneficiaryName(eachCell.get(7));
+                    infinityBeftnModel.setBeneficiaryAccount(eachCell.get(8).replaceAll("\\.", ""));
+                    infinityBeftnModel.setBeneficiaryAccountType(eachCell.get(9));
+                    infinityBeftnModel.setRoutingNumber(eachCell.get(10));
+                    infinityBeftnModel.setAmount(Double.parseDouble(eachCell.get(11).replaceAll(",", "")));
+                    infinityBeftnModel.setTranNo(eachCell.get(12));
                     infinityBeftnModelList.add(infinityBeftnModel);
                     eachCell.clear();
                     count++;
@@ -84,7 +85,7 @@ public class InfinityBeftnDataServiceHelper {
                         infinityBeftnModel.getEnteredDate(),
                         infinityBeftnModel.getCurrency(),
                         infinityBeftnModel.getAmount(),
-                        infinityBeftnModel.getRemitterName(),
+                        infinityBeftnModel.getOrgName(),
                         "7010228",
                         null,
                         null,
