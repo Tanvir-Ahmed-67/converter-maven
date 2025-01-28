@@ -47,7 +47,7 @@ public class BeftnExcelSplitService {
             // Process a batch when batch size is reached or no more rows
             if (batchRows.size() == BATCH_SIZE || !rowIterator.hasNext()) {
                 for (Row row : batchRows) {
-                    Cell inputCell = row.getCell(9);
+                    Cell inputCell = row.getCell(11);
 
                     if (rowCount % maxRowsPerFile == 0 && rowCount > 0) {
                         saveWorkbook(outputWorkbook, outputDirectory + "/" + fileName + fileCount++ + ".xlsx");
@@ -154,7 +154,7 @@ public class BeftnExcelSplitService {
             Cell inputCell = inputRow.getCell(i);
             Cell outputCell = outputRow.createCell(i);
             if (inputCell != null) {
-                if (inputCell.getColumnIndex() != 9) {
+                if (inputCell.getColumnIndex() != 11) {
                     String cellValue = dataFormatter.formatCellValue(inputCell);
                     outputCell.setCellValue(cellValue);
                     outputCell.setCellStyle(textStyle);
