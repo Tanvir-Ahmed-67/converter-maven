@@ -157,7 +157,7 @@ public class BeftnExcelSplitService {
                 if (inputCell.getColumnIndex() != 11) {
                     String cellValue = dataFormatter.formatCellValue(inputCell);
                     // Remove special characters and spaces
-                    cellValue = cellValue.replaceAll("[^a-zA-Z0-9]", "");
+                    cellValue = cellValue.replaceAll("[^a-zA-Z0-9 ]", "");
                     outputCell.setCellValue(cellValue);
                     outputCell.setCellStyle(textStyle);
                 } else {
