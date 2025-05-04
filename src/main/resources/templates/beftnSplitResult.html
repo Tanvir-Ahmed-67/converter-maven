@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <title>Data Converter</title>
+  <link rel="stylesheet" href="/css/main.css" />
+</head>
+<body>
+
+<div class="upload-container">
+    <div class="upload-header">
+      <h2 style="text-align: center">BEFTN File Splitter Result</h2>
+    </div>
+    <div class="upload-content">
+      <h4 th:text="${message}"></h4>
+        <div th:if="${individualSum}">
+            <strong><p>Individual Sum:</p></strong>
+                <span th:text="'('"></span>
+                <span th:each="item, iterStat : ${individualSum}">
+            <span th:text="${item}"></span>
+            <span th:if="${!iterStat.last}" th:text="' + '"></span>
+        </span>
+                <span th:text="')'"></span>
+        </div>
+        <div th:if="${grossSum}">
+            <strong><p>Gross Sum: </p></strong>
+            <span th:text="${grossSum[0]}"></span>
+        </div>
+        <div th:if="${totalCount}">
+            <strong><p>Total Number of Remittances:</p></strong>
+            <span th:text="${totalCount[0]}"></span>
+        </div>
+      <div th:if="${outputDir}">
+        <h5>Output files are saved in the following directory -</h5>
+          <span th:text="${networkPath}">\\172.16.13.132\output</span><br />
+          <span th:text="${outputDir}"></span>
+      </div>
+        <br><br>
+        <div class="single-upload">
+            <center><a href="/" class="btn btn-primary">Go Back</a></center>
+        </div>
+    </div>
+</div>
+</br>
+</body>
+</html>

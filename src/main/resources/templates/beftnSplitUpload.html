@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <title>BEFTN File Splitter</title>
+  <link rel="stylesheet" href="/css/main.css" />
+</head>
+<body>
+<div class="upload-container">
+  <div class="upload-header">
+    <h2 style="text-align: center">BEFTN Excel File Splitter</h2>
+  </div>
+  <div class="upload-content">
+    <div class="single-upload">
+      <form action="/beftn/split" method="post" enctype="multipart/form-data">
+        <div class="row">
+          <br>
+            <label for="file">Choose BEFTN File:</label>
+            <input type="file" id="file" name="file" accept=".xlsx" required>
+            <br><br>
+            <label for="maxRows">Max Number of Rows Per File: </label>
+            <input type="number" id="maxRows" name="maxRows" value="1000" required>
+            <br><br>
+            <label for="initialFileNumber">Initial File Number:</label>
+            <input type="number" id="initialFileNumber" name="initialFileNumber" value="1" required>
+          <br><br>
+        </div>
+        <center><button type="submit" class="button-24">Split File</button></center>
+      </form>
+    </div>
+  </div>
+</div>
+</body>
+</html>

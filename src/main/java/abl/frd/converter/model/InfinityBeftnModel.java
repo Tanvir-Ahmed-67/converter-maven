@@ -13,41 +13,85 @@ public class InfinityBeftnModel {
     private String exCode;
     @Column(name = "tranNo")
     private String tranNo;
-    @Column(name = "customerNo")
-    private String customerNo;
+    @Column(name = "orgCustomerNo")
+    private String orgCustomerNo;
     @Column(name = "currency")
     private String currency;
     @Column(name = "amount")
     private double amount;
     @Column(name = "enteredDate")
     private String enteredDate;
-    @Column(name = "remitterName")
-    private String remitterName;
-    @Column(name = "remitterAccount")
-    private String remitterAccount;
     @Column(name = "beneficiaryName")
     private String beneficiaryName;
     @Column(name = "beneficiaryAccount")
     private String beneficiaryAccount;
-    @Column(name = "remitterAccountType")
-    private String remitterAccountType;
+    @Column(name = "orgAccountType")
+    private String orgAccountType;
     @Column(name = "beneficiaryAccountType")
     private String beneficiaryAccountType;
     @Column(name = "routingNumber")
     private String routingNumber;
 
-    public InfinityBeftnModel(String tranNo, String customerNo, String currency, double amount, String remitterName, String remitterAccount, String beneficiaryName, String beneficiaryAccount, String remitterAccountType, String beneficiaryAccountType, String routingNumber) {
+    @Column(name = "orgCompanyId")
+    private String orgCompanyId;
+
+    @Column(name = "orgCompanyName")
+    private String orgCompanyName;
+
+    @Column(name = "orgName")
+    private String orgName;
+
+    @Column(name = "orgAccountNo")
+    private String orgAccountNo;
+
+
+
+    public InfinityBeftnModel(String orgCompanyId, String orgCompanyName, String orgName, String orgAccountNo, String tranNo, String orgCustomerNo, String currency, double amount, String beneficiaryName, String beneficiaryAccount, String orgAccountType, String beneficiaryAccountType, String routingNumber) {
         this.tranNo = tranNo;
-        this.customerNo = customerNo;
+        this.orgCustomerNo = orgCustomerNo;
         this.currency = currency;
         this.amount = amount;
-        this.remitterName = remitterName;
-        this.remitterAccount = remitterAccount;
         this.beneficiaryName = beneficiaryName;
         this.beneficiaryAccount = beneficiaryAccount;
-        this.remitterAccountType = remitterAccountType;
+        this.orgAccountType = orgAccountType;
         this.beneficiaryAccountType = beneficiaryAccountType;
         this.routingNumber = routingNumber;
+        this.orgCompanyId = orgCompanyId;
+        this.orgCompanyName = orgCompanyName;
+        this.orgName = orgName;
+        this.orgAccountNo = orgAccountNo;
+    }
+
+    public String getOrgCompanyId() {
+        return orgCompanyId;
+    }
+
+    public void setOrgCompanyId(String orgCompanyId) {
+        this.orgCompanyId = orgCompanyId;
+    }
+
+    public String getOrgCompanyName() {
+        return orgCompanyName;
+    }
+
+    public void setOrgCompanyName(String orgCompanyName) {
+        this.orgCompanyName = orgCompanyName;
+    }
+
+    public String getOrgName() {
+        return orgName;
+    }
+
+    public void setOrgName(String orgName) {
+        this.orgName = orgName;
+    }
+
+    public String getOrgAccountNo() {
+        return orgAccountNo;
+    }
+
+    public void setOrgAccountNo(String orgAccountNo) {
+        this.orgAccountNo = orgAccountNo;
     }
 
     public InfinityBeftnModel() {
@@ -60,15 +104,13 @@ public class InfinityBeftnModel {
                 "id=" + id +
                 ", exCode='" + exCode + '\'' +
                 ", tranNo='" + tranNo + '\'' +
-                ", customerNo='" + customerNo + '\'' +
+                ", customerNo='" + orgCustomerNo + '\'' +
                 ", currency='" + currency + '\'' +
                 ", amount=" + amount +
                 ", enteredDate='" + enteredDate + '\'' +
-                ", remitterName='" + remitterName + '\'' +
-                ", remitterAccount='" + remitterAccount + '\'' +
                 ", beneficiaryName='" + beneficiaryName + '\'' +
                 ", beneficiaryAccount='" + beneficiaryAccount + '\'' +
-                ", remitterAccountType='" + remitterAccountType + '\'' +
+                ", remitterAccountType='" + orgAccountType + '\'' +
                 ", beneficiaryAccountType='" + beneficiaryAccountType + '\'' +
                 ", routingNumber='" + routingNumber + '\'' +
                 '}';
@@ -98,12 +140,12 @@ public class InfinityBeftnModel {
         this.tranNo = tranNo;
     }
 
-    public String getCustomerNo() {
-        return customerNo;
+    public String getOrgCustomerNo() {
+        return orgCustomerNo;
     }
 
-    public void setCustomerNo(String customerNo) {
-        this.customerNo = customerNo;
+    public void setOrgCustomerNo(String customerNo) {
+        this.orgCustomerNo = customerNo;
     }
 
     public String getCurrency() {
@@ -130,22 +172,6 @@ public class InfinityBeftnModel {
         this.enteredDate = enteredDate;
     }
 
-    public String getRemitterName() {
-        return remitterName;
-    }
-
-    public void setRemitterName(String remitterName) {
-        this.remitterName = remitterName;
-    }
-
-    public String getRemitterAccount() {
-        return remitterAccount;
-    }
-
-    public void setRemitterAccount(String remitterAccount) {
-        this.remitterAccount = remitterAccount;
-    }
-
     public String getBeneficiaryName() {
         return beneficiaryName;
     }
@@ -162,12 +188,12 @@ public class InfinityBeftnModel {
         this.beneficiaryAccount = beneficiaryAccount;
     }
 
-    public String getRemitterAccountType() {
-        return remitterAccountType;
+    public String getOrgAccountType() {
+        return orgAccountType;
     }
 
-    public void setRemitterAccountType(String remitterAccountType) {
-        this.remitterAccountType = remitterAccountType;
+    public void setOrgAccountType(String remitterAccountType) {
+        this.orgAccountType = remitterAccountType;
     }
 
     public String getBeneficiaryAccountType() {

@@ -29,32 +29,28 @@ public class ShahGlobalDataServiceHelper {
                         contentType.equalsIgnoreCase("application/vnd.oasis.opendocument.spreadsheet")||
                         contentType.equalsIgnoreCase("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
     }
+    public static Workbook getWorkbook(InputStream is) throws IOException {
+        try {
+            // WorkbookFactory automatically detects whether it's .xls or .xlsx
+            return WorkbookFactory.create(is);
+        } catch (Exception e) {
+            throw new IOException("Failed to open the Excel file. Please ensure it's in .xls or .xlsx format.", e);
+        }
+    }
 
     public static List<ShahGlobalDataModel> csvToShahGlobalDataModels(InputStream is) {
         try{
-            Workbook records = new XSSFWorkbook(is);
+            Workbook records = getWorkbook(is);
             Row r;
-            StringBuilder rowData = new StringBuilder();
             Sheet worksheet = records.getSheetAt(0);
             List<ShahGlobalDataModel> shahGlobalDataModelList = new ArrayList<>();
             int rowStart = 1;// Math.min(15, worksheet.getFirstRowNum());
             int rowEnd = worksheet.getLastRowNum(); //Math.max(1400, worksheet.getLastRowNum());
-
-            /*
-            r=worksheet.getRow(3);
-            Cell cell = r.getCell(0,Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
-            String enteredDate="";
-            if (cell != null && cell.getCellType() == CellType.STRING){
-                rowData.append(cell.getStringCellValue());
-                rowData.append(" "); // Separator for cells, change if needed
-                enteredDate = rowData.toString().replace("DATE:", "").trim();
-            }
-             */
             for (int rowNum = rowStart; rowNum <= rowEnd; rowNum++) {
                 ShahGlobalDataModel shahGlobalDataModel = new ShahGlobalDataModel();
                 List<String> eachCell = new ArrayList<>();
                 r = worksheet.getRow(rowNum);
-                if (r == null) {
+                if (r == null || isRowEmpty(r)) {
                     // This whole row is empty
                     break;
                 }
@@ -78,7 +74,7 @@ public class ShahGlobalDataServiceHelper {
                 shahGlobalDataModel.setBeneficiaryAccount(eachCell.get(4));
                 shahGlobalDataModel.setBankName(eachCell.get(5));
                 shahGlobalDataModel.setBranchName(eachCell.get(7));
-                shahGlobalDataModel.setAmount(Double.parseDouble(eachCell.get(2)));
+                shahGlobalDataModel.setAmount(Double.parseDouble(eachCell.get(2).replace(",", "")));
                 shahGlobalDataModel.setEnteredDate(eachCell.get(1));
                 shahGlobalDataModel.setRemitterName(eachCell.get(9));
                 shahGlobalDataModel.setBranchCode(eachCell.get(8));
@@ -92,6 +88,21 @@ public class ShahGlobalDataServiceHelper {
         } catch (IOException e) {
             throw new RuntimeException("fail to parse CSV file: " + e.getMessage());
         }
+    }
+    // Helper method to check if a row is empty
+    private static boolean isRowEmpty(Row row) {
+        for (int cellNum = row.getFirstCellNum(); cellNum < row.getLastCellNum(); cellNum++) {
+            Cell cell = row.getCell(cellNum);
+            if (cell != null && cell.getCellType() != CellType.BLANK) {
+                // Check if cell contains meaningful data
+                if (cell.getCellType() == CellType.STRING && !cell.getStringCellValue().trim().isEmpty()) {
+                    return false;
+                } else if (cell.getCellType() == CellType.NUMERIC || cell.getCellType() == CellType.BOOLEAN) {
+                    return false;
+                }
+            }
+        }
+        return true; // All cells are empty
     }
     public static ByteArrayInputStream shahGlobalDataModelToCSV(List<ShahGlobalDataModel> shahGlobalDataModelList) {
         final CSVFormat format = CSVFormat.DEFAULT.withDelimiter('|').withRecordSeparator("\r\n").withIgnoreEmptyLines(true);
