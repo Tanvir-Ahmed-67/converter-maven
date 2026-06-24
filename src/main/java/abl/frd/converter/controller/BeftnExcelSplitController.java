@@ -31,6 +31,7 @@ public class BeftnExcelSplitController {
     private String outputDir;
     @Autowired
     private BeftnExcelSplitService beftnExcelSplitService;
+    private String uploadedFileBaseName;
     @PostConstruct
     public void init() {
         ZipSecureFile.setMinInflateRatio(0.0); // Or 0.0 to disable
@@ -64,6 +65,7 @@ public class BeftnExcelSplitController {
         try {
             int extensionIndex = file.getOriginalFilename().lastIndexOf(".");
             String fileNameWithoutExtension = file.getOriginalFilename().substring(0, extensionIndex);
+        this.uploadedFileBaseName = fileNameWithoutExtension;
             String inputFilePath = outputDir + "/" + file.getOriginalFilename();
 
             Map<String, List<String>> returnMap = beftnExcelSplitService.splitExcelFile(file.getInputStream(), outputDir, maxRows, fileNameWithoutExtension, initialFileNumber);
@@ -117,7 +119,8 @@ public class BeftnExcelSplitController {
             return ResponseEntity.notFound().build();
         }
 
-        File zipFile = new File(outputDir, "splitted_beftn.zip");
+        String zipFileName = (uploadedFileBaseName != null && !uploadedFileBaseName.isEmpty()) ? uploadedFileBaseName + ".zip" : "splitted_beftn.zip";
+        File zipFile = new File(outputDir, zipFileName);
         try {
             try (java.util.zip.ZipOutputStream zos = new java.util.zip.ZipOutputStream(new java.io.FileOutputStream(zipFile))) {
                 byte[] buffer = new byte[4096];
